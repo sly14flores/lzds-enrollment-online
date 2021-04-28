@@ -14,7 +14,7 @@ export default [
         component: Profile,
     },
     {
-        path: "/enroll",
+        path: "/enrollment",
         name: "Enroll",
         component: Enroll,
     },         

@@ -41,7 +41,9 @@ const student = {
     gp_firstname: null,
     gp_middlename: null,
     gp_lastname: null,
-    gp_contact_no: null,    
+    gp_contact_no: null,
+    indigent: false,
+    updated_dt: null,
 }
 
 const testStudent = {
@@ -79,10 +81,32 @@ const state = () => {
 
 const mutations = {
     INIT(state) {
-        state.student = student
+        state.student = {...student}
     },    
     STUDENT(state,payload) {
-        state.student = payload
+        state.student = {...payload}
+        // state.student.id = payload.id
+        // state.student.lrn = payload.lrn
+        // state.student.lastname = payload.lastname
+        // state.student.firstname = payload.firstname
+        // state.student.middlename = payload.middlename
+        // state.student.ext_name = payload.ext_name
+        // state.student.date_of_birth = payload.date_of_birth
+        // state.student.gender = payload.gender
+        // // state.student.home_address = payload.home_address
+        // state.student.contact_no = payload.contact_no
+        // state.student.student_status = payload.student_status
+        // state.student.email_address = payload.email_address
+        // state.student.indigenous = payload.indigenous
+        // state.student.mother_tongue = payload.mother_tongue
+        // state.student.house_no = payload.house_no
+        // state.student.zip_code = payload.zip_code
+        // state.student.relationship = payload.relationship
+        // state.student.gp_firstname = payload.gp_firstname
+        // state.student.gp_middlename = payload.gp_middlename
+        // state.student.gp_lastname = payload.gp_lastname
+        // state.student.gp_contact_no = payload.gp_contact_no   
+        // state.student.updated_dt = payload.updated_dt
     }
 }
 
@@ -98,7 +122,8 @@ const actions = {
     },    
     async STUDENT({commit, dispatch}, payload) {
         try {
-            const { data } = await newProfile(payload)
+            const { data: { data } } = await newProfile(payload)
+            commit('STUDENT', data)
         } catch(error) {
             const { response } = error || {}
             dispatch('ERROR',response)
@@ -106,7 +131,7 @@ const actions = {
     },
     async QUERY_STUDENT({commit, dispatch}, payload) {
         try {
-            const { data } = await queryStudent(payload)
+            const { data: { data } } = await queryStudent(payload)
         } catch(error) {
             const { response } = error || {}
             dispatch('ERROR',response)
