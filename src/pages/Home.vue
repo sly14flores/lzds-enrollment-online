@@ -59,6 +59,8 @@ export default {
 
         const studentStatus = ref(null)
 
+        store.dispatch('students/INIT')
+
         const next = () => {
             if (studentStatus.value == null) {
                 toast.add({severity:'error', summary: 'Student status is required', detail:'Please select student status', life: 3000});
