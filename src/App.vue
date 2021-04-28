@@ -1,21 +1,28 @@
 <template>
-  <LayoutWrapper>
-    <router-view />
-  </LayoutWrapper>
+  <Toast position="top-right" />
+  <transition name="fade" mode="out-in">
+      <router-view />
+  </transition>
 </template>
 
 <script>
 
-import LayoutWrapper from './components/LayoutWrapper'
+import Toast from 'primevue/toast';
 
 export default {
   name: 'App',
   components: {
-    LayoutWrapper
+    Toast
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+  @import './App.scss';
+</style>
 
+<style>
+    .lzds-center {
+        text-align: center;
+    }
 </style>
