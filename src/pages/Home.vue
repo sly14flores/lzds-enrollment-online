@@ -7,6 +7,7 @@
                     <Card class="card-mt">
                         <template #title>
                             Please select status
+                            <hr />
                         </template>                
                         <template #content>
                             <div class="">
