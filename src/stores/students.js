@@ -1,6 +1,7 @@
 import { apiUrl } from '../url.js'
 // import route from '../library/route'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 /**
  * APIs
@@ -75,17 +76,30 @@ const testStudent = {
     gp_contact_no: "1234",
 }
 
+const studentInfo = {
+    id: 0
+}
+
+const loading = false
+
 const state = () => {
     return {
         student,
-        testStudent
+        testStudent,
+        loading,
+        studentInfo
     }
 }
 
 const mutations = {
     INIT(state) {
         state.student = {...student}
-    },    
+        state.studentInfo = {...studentInfo}
+        state.loading = false
+    },
+    LOADING(state,payload) {
+        state.loading = payload
+    },
     STUDENT(state,payload) {
         state.student = {...payload}
         // state.student.id = payload.id
@@ -110,6 +124,9 @@ const mutations = {
         // state.student.gp_lastname = payload.gp_lastname
         // state.student.gp_contact_no = payload.gp_contact_no   
         // state.student.updated_dt = payload.updated_dt
+    },
+    STUDENT_INFO(state,payload) {
+        state.studentInfo = payload
     }
 }
 
@@ -117,11 +134,12 @@ const actions = {
     INIT({commit}) {
         commit('INIT')
     },
-    ERROR(payload) {
+    ERROR({commit},payload) {
         const { message, status } = payload
         if (message) {
             //
         }
+        commit('LOADING',false)
     },    
     async STUDENT({commit, dispatch}, payload) {
         try {
@@ -133,13 +151,45 @@ const actions = {
         }
     },
     async QUERY_STUDENT({commit, dispatch}, payload) {
+        commit('LOADING',true)
         try {
             const { data: { data } } = await queryStudent(payload)
+            commit('STUDENT_INFO',data)
+            commit('LOADING',false)
+            Swal.fire({
+                // text: 'No record found in our database',
+                html: '<div style="padding-left: 35px; margin-top: -35px; color:#afdbbf">Record found</div>',                    
+                icon: 'success',
+                toast: 'true',
+                // position: 'top-right',
+                position: 'top',
+                showConfirmButton: false,
+                showCancelButton: false,
+                background: '#078a3b',
+                padding: '1.5rem',
+                timer: 2000,
+            })            
         } catch(error) {
             const { response } = error || {}
+            Swal.fire({
+                // text: 'No record found in our database',
+                html: '<div style="padding-left: 35px; margin-top: -35px; color:#d10926">No record found in our database</div>',                    
+                icon: 'error',
+                toast: 'true',
+                // position: 'top-right',
+                position: 'top',
+                showConfirmButton: false,
+                showCancelButton: false,
+                background: '#e8c2cf',
+                padding: '1.5rem',
+                timer: 3000,
+            })            
             dispatch('ERROR',response)
         }
-    }    
+    },
+    STUDENT_INFO({commit},payload) {
+        commit('STUDENT_INFO',payload)
+    }
 }
 
 const getters = {}

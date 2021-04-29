@@ -3,32 +3,38 @@
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form @submit="onSubmit">
-                    <Card>
-                        <template #title>
-                            <p class="p-text-center">Retrieve your Student Information</p>
-                            <hr />                            
-                        </template>
-                        <template #content>
-                            <div class="p-fluid p-formgrid p-grid">
-                                <div class="p-field p-col-6">
-                                    <label class="p-text-uppercase">Learner Reference Number</label>
-                                    <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
-                                    <small class="p-error" v-if="lrnError">Please enter your Learner Reference Number</small>                                    
-                                </div>
-                                <div class="p-field p-col-6">
-                                    <label class="p-text-uppercase">Date of birth</label>
-                                    <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
-                                    <small class="p-error" v-if="lrnError">Please enter your date of birth</small>                                    
-                                </div>                                
-                            </div>
-                        </template>
-                        <template #footer>
-                            <div class="lzds-center p-mt-2 p-mb-4">
-                                <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
-                                <Button type="submit" icon="pi pi-check" label="Next" style="margin-left: .5em" />
-                            </div>
-                        </template>                        
-                    </Card>
+                    <div class="p-grid">
+                        <div class="p-col-6 p-offset-3">
+                            <BlockUI :blocked="blocked">
+                                <Card>
+                                    <template #title>
+                                        <p class="p-text-center">Retrieve your Student Information</p>
+                                        <hr />                            
+                                    </template>
+                                    <template #content>
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            <div class="p-field p-md-12 p-lg-6">
+                                                <label class="p-text-uppercase">Learner Reference Number</label>
+                                                <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
+                                                <small class="p-error" v-if="lrnError">Please enter your Learner Reference Number</small>                                    
+                                            </div>
+                                            <div class="p-field p-md-12 p-lg-6">
+                                                <label class="p-text-uppercase">Date of birth</label>
+                                                <InputText type="date" v-model="birthday" :class="{'p-invalid': birthdayError}" />
+                                                <small class="p-error" v-if="birthdayError">Please enter your date of birth</small>                                    
+                                            </div>                                
+                                        </div>
+                                    </template>
+                                    <template #footer>
+                                        <div class="lzds-center p-mt-6 p-mb-4">
+                                            <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
+                                            <NextButton :loading="loading" style="margin-left: .5em" />
+                                        </div>
+                                    </template>                        
+                                </Card>
+                            </BlockUI>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -46,12 +52,14 @@ import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
+import NextButton from '../components/NextButton'
 
 import Card from 'primevue/card/sfc'
 import Button from 'primevue/button/sfc'
 import RadioButton from 'primevue/radiobutton/sfc'
 import InputText from 'primevue/inputtext/sfc'
 import Dropdown from 'primevue/dropdown/sfc'
+import BlockUI from 'primevue/blockui/sfc'
 
 import { useForm, useField } from 'vee-validate'
 
@@ -63,7 +71,9 @@ export default {
         Button,
         RadioButton,
         InputText,
-        Dropdown,        
+        Dropdown,
+        NextButton,
+        BlockUI  
     },
     setup() {
 
@@ -73,10 +83,21 @@ export default {
         const toast = useToast()
 
         const studentStatus = 'Regular'
+        store.dispatch('students/STUDENT_INFO',{ id: 0 })
+
+        watch(
+            () => store.state.students.studentInfo.id,
+            (data, prevData) => {
+                router.push('/student/info')
+            }
+        )
 
         const init = {
             initialValues: {
-                lrn: null
+                // lrn: null,
+                // birthday: null,
+                lrn: '101070110017',
+                birthday: '2006-10-19',                
             }
         }        
 
@@ -90,11 +111,12 @@ export default {
         }
 
         const { value: lrn, errorMessage: lrnError } = useField('lrn',validateField);    
+        const { value: birthday, errorMessage: birthdayError } = useField('birthday',validateField);    
         
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
-            // const { student } = values
-            // store.dispatch('students/STUDENT', student)
+            const { lrn, birthday } = values
+            store.dispatch('students/QUERY_STUDENT', { lrn, birthday })
         })        
 
         const back = () => {
@@ -104,10 +126,20 @@ export default {
         return {
             lrn,
             lrnError,
+            birthday,
+            birthdayError,
             back,
             onSubmit
         }
 
+    },
+    computed: {
+        loading() {
+            return this.$store.state.students.loading
+        },
+        blocked() {
+            return this.$store.state.students.loading
+        }
     }
 }
 </script>
@@ -115,24 +147,24 @@ export default {
 <style scoped>
 
     .lzds-width {
-        width: 40%;
+        width: 80%;
     }
 
     @media only screen and (max-width: 1200px) {
         .lzds-width {
-            width: 50%
+            width: 80%
         }
     }
 
     @media only screen and (max-width: 1024px) {
         .lzds-width {
-            width: 50%
+            width: 80%
         }
     }
 
     @media only screen and (max-width: 768px) {
         .lzds-width {
-            width: 90%
+            width: 100%
         }
     }
 

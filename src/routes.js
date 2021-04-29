@@ -2,6 +2,7 @@ import Home from './pages/Home'
 import Profile from './pages/Profile'
 import Enroll from './pages/Enrollment'
 import QueryStudent from './pages/Query'
+import StudentInfo from './pages/StudentInfo'
 
 export default [
     {
@@ -23,5 +24,10 @@ export default [
         path: "/enrollment",
         name: "Enroll",
         component: Enroll,
-    },         
+    },
+    {
+        path: "/student/info",
+        name: "StudentInfo",
+        component: StudentInfo,
+    },    
 ]
