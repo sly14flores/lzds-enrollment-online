@@ -20,6 +20,7 @@ const queryStudent = (payload) => {
 const student = {
     id: 0,
     lrn: null,
+    esc_voucher_grantee: null,
     lastname: null,
     firstname: null,
     middlename: null,
@@ -47,7 +48,9 @@ const student = {
 }
 
 const testStudent = {
+    id: 1143,
     lrn:"123412341234",
+    esc_voucher_grantee: false,
     lastname: "Flores",
     firstname: "Sly",
     middlename: "Bulilan",
