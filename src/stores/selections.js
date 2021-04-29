@@ -44,8 +44,8 @@ import axios from 'axios'
  }
 
  const GET_FEES = `${apiUrl}/selections/fees/:id`
- const getFees = ({ code }) => {
-    const url =  route(GET_FEES, { code })
+ const getFees = ({ id }) => {
+    const url =  route(GET_FEES, { id })
     return axios.get(url)     
  }
 
@@ -63,6 +63,7 @@ const indigenousGroups = []
 const levels = []
 const fees = []
 const questionnaires = []
+const down_payment = 0
 
 const state = () => {
     return {
@@ -75,6 +76,7 @@ const state = () => {
         levels,
         fees,
         questionnaires,
+        down_payment
     }
 }
 
@@ -116,7 +118,13 @@ const mutations = {
     },
     QUESTIONNAIRES(state, payload) {
         state.questionnaires = payload
-    }
+    },
+    FULL_PAYMENT(state) {
+        state.fees.down_payment = state.fees.total
+    },
+    DOWN_PAYMENT(state) {
+        state.fees.down_payment = state.down_payment
+    },    
 }
 
 const actions = {
@@ -186,10 +194,9 @@ const actions = {
             dispatch('ERROR',response)
         }
     },
-    async LEVELS({commit, dispatch}, payload) {
-        const { code } = payload
+    async LEVELS({commit, dispatch}) {
         try {
-            const { data: { data } } = await getLevels({code})
+            const { data: { data } } = await getLevels()
             commit('LEVELS', data)
         } catch(error) {
             const { response } = error || {}
@@ -197,9 +204,9 @@ const actions = {
         }
     },
     async FEES({commit, dispatch}, payload) {
-        const { code } = payload
+        const { id } = payload
         try {
-            const { data: { data } } = await getFees({code})
+            const { data: { data } } = await getFees({id})
             commit('FEES', data)
         } catch(error) {
             const { response } = error || {}
@@ -214,7 +221,13 @@ const actions = {
             const { response } = error || {}
             dispatch('ERROR',response)
         }
-    }    
+    },
+    FULL_PAYMENT({commit}) {
+        commit('FULL_PAYMENT')
+    },
+    DOWN_PAYMENT({commit}) {
+        commit('DOWN_PAYMENT')
+    }
 }
 
 const getters = {}

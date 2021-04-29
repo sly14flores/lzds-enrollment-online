@@ -13,36 +13,50 @@
                             <hr />
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col-3">
-                                    <label>LRN</label>
+                                    <label class="p-text-bold">LRN</label>
                                     <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
                                     <small class="p-error">{{ lrnError }}</small>                                  
+                                </div>
+                                <div class="p-field p-col-3">
+                                    <label class="p-text-bold">ESC Voucher Grantee</label>
+                                    <div class="p-formgroup-inline p-mt-2">
+                                        <div class="p-field-checkbox">
+                                            <RadioButton id="escNo" name="esc_voucher_grantee" :value="false" v-model="esc_voucher_grantee" :class="{'p-invalid': escError}" />
+                                            <label for="escNo">No</label>
+                                        </div>
+                                        <div class="p-field-checkbox">
+                                            <RadioButton id="escYes" name="esc_voucher_grantee" :value="true" v-model="esc_voucher_grantee" :class="{'p-invalid': escError}" />
+                                            <label for="escYes">Yes</label>
+                                        </div>
+                                    </div>
+                                    <small class="p-error">{{ escError }}</small>
                                 </div>
                             </div>
                             <h5><i class="pi pi-user"></i> Basic Info</h5>
                             <hr />
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col">
-                                    <label>Last name</label>
+                                    <label class="p-text-bold">Last name</label>
                                     <InputText type="text" v-model="lastname" :class="{'p-invalid': lastnameError}" />
                                     <small class="p-error">{{ lastnameError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>First name</label>
+                                    <label class="p-text-bold">First name</label>
                                     <InputText type="text" v-model="firstname" :class="{'p-invalid': firstnameError}" />
                                     <small class="p-error">{{ firstnameError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Middle name</label>
+                                    <label class="p-text-bold">Middle name</label>
                                     <InputText type="text" v-model="middlename" />
                                 </div>                                                                              
                             </div>
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col">
-                                    <label>Extension name</label>
+                                    <label class="p-text-bold">Extension name</label>
                                     <InputText type="text" v-model="ext_name" />
                                 </div>                                 
                                 <div class="p-field p-col">
-                                    <label>Gender</label>
+                                    <label class="p-text-bold">Gender</label>
                                     <div class="p-formgroup-inline">
                                         <div class="p-field-checkbox">
                                             <RadioButton id="Male" name="gender" value="Male" v-model="gender" :class="{'p-invalid': genderError}" />
@@ -56,15 +70,15 @@
                                     <small class="p-error">{{ genderError }}</small>
                                 </div>                                 
                                 <div class="p-field p-col">
-                                    <label>Birthdate</label>
+                                    <label class="p-text-bold">Birthdate</label>
                                     <InputText type="date" v-model="date_of_birth" :class="{'p-invalid': date_of_birthError}" />
                                     <small class="p-error">{{ date_of_birthError }}</small>
                                 </div>                              
                             </div>
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col-4">
-                                    <label>Are you a member of indigent group</label>
-                                    <div class="p-formgroup-inline">
+                                    <label class="p-text-bold">Are you a member of indigent group</label>
+                                    <div class="p-formgroup-inline p-mt-2">
                                         <div class="p-field-checkbox">
                                             <RadioButton id="indigent_no" name="indigent" :value="false" v-model="indigent" />
                                             <label for="indigent_no">No</label>
@@ -76,49 +90,49 @@
                                     </div>                                 
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label>Indigenous Group</label>
+                                    <label class="p-text-bold">Indigenous Group</label>
                                     <Dropdown v-model="indigenous" :options="indigenousGroups" optionLabel="name" optionValue="name" placeholder="Select indigenous group" :filter="true" :disabled="!indigent" />
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label>Mother Tonque</label>
+                                    <label class="p-text-bold">Mother Tonque</label>
                                     <Dropdown v-model="mother_tongue" :class="{'p-invalid': mother_tongueError}" :options="dialects" optionLabel="name" optionValue="name" placeholder="Select dialect" :filter="true" />
                                     <small class="p-error">{{ mother_tongueError }}</small>
                                 </div>                                                                                                                          
                             </div>                            
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col-4">
-                                    <label>Province</label>
+                                    <label class="p-text-bold">Province</label>
                                     <Dropdown v-model="province" :class="{'p-invalid': provinceError}" :options="provinces" optionLabel="name" optionValue="code" placeholder="Select province" :filter="true" @change="fetchCities" />
                                     <small class="p-error">{{ provinceError }}</small>
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label>Municipality/City</label>
+                                    <label class="p-text-bold">Municipality/City</label>
                                     <Dropdown v-model="city" :class="{'p-invalid': cityError}" :options="cities" optionLabel="name" optionValue="code" placeholder="Select municipality/city" :filter="true" @change="fetchBarangays" />
                                     <small class="p-error">{{ cityError }}</small>
                                 </div>
                                 <div class="p-field p-col-4">
-                                    <label>Barangay</label>
+                                    <label class="p-text-bold">Barangay</label>
                                     <Dropdown v-model="barangay" :class="{'p-invalid': barangayError}" :options="barangays" optionLabel="name" optionValue="code" placeholder="Select barangay" :filter="true" />
                                     <small class="p-error">{{ barangayError }}</small>
                                 </div>
                             </div>
                             <div class="p-fluid p-formgrid p-grid p-mb-2">                                                                                          
                                 <div class="p-field p-col">
-                                    <label>House No / Bldg / Subdivision</label>
+                                    <label class="p-text-bold">House No / Bldg / Subdivision</label>
                                     <InputText type="text" v-model="house_no" />
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Zip Code</label>
+                                    <label class="p-text-bold">Zip Code</label>
                                     <InputText type="text" v-model="zip_code" :class="{'p-invalid': zip_codeError}" />
                                     <small class="p-error">{{ zip_codeError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Contact No</label>
+                                    <label class="p-text-bold">Contact No</label>
                                     <InputText type="text" v-model="contact_no" :class="{'p-invalid': contact_noError}" />
                                     <small class="p-error">{{ contact_noError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Email Address</label>
+                                    <label class="p-text-bold">Email Address</label>
                                     <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
                                     <small class="p-error">{{ email_addressError }}</small>
                                 </div>
@@ -127,35 +141,35 @@
                             <hr />
                             <div class="p-fluid p-formgrid p-grid p-mb-2">
                                 <div class="p-field p-col">
-                                    <label>Relationship</label>
+                                    <label class="p-text-bold">Relationship</label>
                                     <Dropdown v-model="relationship" :class="{'p-invalid': relationshipError}" :options="relationships" optionLabel="name" optionValue="id" placeholder="Select relationship" />
                                     <small class="p-error">{{ relationshipError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Last name</label>
+                                    <label class="p-text-bold">Last name</label>
                                     <InputText type="text" v-model="gp_lastname" :class="{'p-invalid': gp_lastnameError}" />
                                     <small class="p-error">{{ gp_lastnameError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>First name</label>
+                                    <label class="p-text-bold">First name</label>
                                     <InputText type="text" v-model="gp_firstname" :class="{'p-invalid': gp_firstnameError}" />
                                     <small class="p-error">{{ gp_firstnameError }}</small>
                                 </div>
                                 <div class="p-field p-col">
-                                    <label>Middle name</label>
+                                    <label class="p-text-bold">Middle name</label>
                                     <InputText type="text" v-model="gp_middlename" />
                                 </div>                                                          
                             </div>
                             <div class="p-fluid p-formgrid p-grid">
                                 <div class="p-field p-col-3">
-                                    <label>Contact No</label>
+                                    <label class="p-text-bold">Contact No</label>
                                     <InputText type="text" v-model="gp_contact_no" :class="{'p-invalid': gp_contact_noError}" />
                                     <small class="p-error">{{ gp_contact_noError }}</small>
                                 </div>                                 
                             </div>
                         </template>
                         <template #footer>
-                            <div class="lzds-center">
+                            <div class="lzds-center p-mt-2 p-mb-4">
                                 <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                                 <Button type="submit" icon="pi pi-check" label="Next" style="margin-left: .5em" />
                             </div>
@@ -172,6 +186,7 @@
 
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast"
 import { ref, watch } from 'vue'
 
@@ -200,9 +215,15 @@ export default {
 
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
         const toast = useToast()
 
-        console.log(store.state.studentStatus)
+        console.log(route.params.student_status)
+        let studentStatus = route.params.student_status
+        if (studentStatus == 'new') studentStatus = 'New'
+        if (studentStatus == 'transferee') studentStatus = 'Transferee'
+        const transfereeStudent = studentStatus == 'Transferee'
+
         // store.dispatch('selections/REGIONS')
         store.dispatch('selections/PROVINCES',{code: '01'})
         store.dispatch('selections/INDIGENOUS_GROUPS')
@@ -211,6 +232,7 @@ export default {
         watch(
             () => store.state.students.student.updated_dt,
             (data, prevData) => {
+                store.dispatch('STUDENT_STATUS',store.state.students.student.student_status)
                 store.dispatch('LRN',store.state.students.student.lrn)
                 store.dispatch('STUDENT_ID',store.state.students.student.id)
                 toast.add({severity:'success', summary: 'Student Profile', detail:'Your information were save successfully', life: 3000});
@@ -226,8 +248,10 @@ export default {
         const init = {
             initialValues: {
                 student: {
-                    ...store.state.students.student,
-                    student_status: store.state.studentStatus
+                    // ...store.state.students.student,
+                    // student_status: store.state.studentStatus,                   
+                    ...store.state.students.testStudent,
+                    student_status: studentStatus,               
                 }
             }
         }
@@ -240,13 +264,21 @@ export default {
             }
             return true;
         }
+
+        function validateBool(value) {
+            if (value==null) {
+                return "This field is required";
+            }
+            return true;
+        }        
         
         function validField(value) {
             return true;
-        }        
+        }
 
         const { value: id } = useField('student.id',validField);
-        const { value: lrn, errorMessage: lrnError } = useField('student.lrn',validateField);
+        const { value: lrn, errorMessage: lrnError } = useField('student.lrn',(transfereeStudent)?validateField:validField);
+        const { value: esc_voucher_grantee, errorMessage: escError } = useField('student.esc_voucher_grantee',validateBool);
         const { value: lastname, errorMessage: lastnameError }  = useField('student.lastname',validateField);
         const { value: firstname, errorMessage: firstnameError }  = useField('student.firstname',validateField);
         const { value: middlename } = useField('student.middlename',validField);
@@ -299,6 +331,7 @@ export default {
         return {
             id,
             lrn,
+            esc_voucher_grantee,
             lastname,
             firstname,
             middlename,
@@ -323,6 +356,7 @@ export default {
             gp_contact_no, 
             indigent,
             lrnError,
+            escError,
             lastnameError,
             firstnameError,
             date_of_birthError,
@@ -341,7 +375,7 @@ export default {
             fetchCities,
             fetchBarangays,
             onSubmit,
-            back
+            back,
         }
 
     },

@@ -2,15 +2,94 @@
     <LayoutWrapper>
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
-                <form>
+                <form @submit="onSubmit">
                     <Card>
                         <template #title>
                             Enrollment Form
                         </template>
                         <template #content>
+                            <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                <div class="p-field p-col-4">
+                                    <label class="p-text-bold">Grade/Level</label>
+                                    <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" :disabled="newStudent" @change="getFees" />
+                                    <small class="p-error">{{ gradeError }}</small>
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <label class="p-text-bold">Total fees</label>
+                                    <InputText type="text" v-model="fees.total" :disabled="true" />                                           
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <label class="p-text-bold">Down payment</label>
+                                    <InputText type="text" v-model="fees.down_payment" />                                           
+                                </div>                                                                                 
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                <div class="p-col-8">
+                                    <lable class="p-text-bold">Fees Details</lable>
+                                    <DataTable class="p-mt-2" :value="fees.fees" showGridlines responsiveLayout="scroll">                                    
+                                        <Column field="category" header="Category"></Column>
+                                        <Column field="description" header="Description"></Column>
+                                        <Column field="amount" header="Amount"></Column>
+                                    </DataTable>                                    
+                                </div>
+                                <div class="p-field p-col-4">
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <label class="p-text-bold">Balance</label>
+                                            <InputText type="text" v-model="balance" :disabled="true" />
+                                        </div>
+                                    </div>                                    
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <label class="p-text-bold">Payment Mode</label>
+                                            <div class="p-formgroup-inline p-mt-2">
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="Full" name="payment_mode" value="full" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="fullPayment" />
+                                                    <label for="Full">Full Payment</label>
+                                                </div>
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="Quarterly" name="payment_mode" value="quarterly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="downPayment" />
+                                                    <label for="Quarterly">Quarterly Payment</label>
+                                                </div>
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="Monthly" name="payment_mode" value="monthly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="downPayment" />
+                                                    <label for="Monthly">Monthly Payment</label>
+                                                </div>                                        
+                                            </div>
+                                            <small class="p-error">{{ payment_modeError }}</small>
+                                        </div>
+                                    </div>
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col">
+                                            <label class="p-text-bold">Payment Method</label>
+                                            <div class="p-formgroup-inline p-mt-2">
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="cash" name="payment_method" value="cash" v-model="payment_method" :class="{'p-invalid': payment_methodError}" />
+                                                    <label for="cash">Cash</label>
+                                                </div>
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="bank_deposit" name="payment_method" value="bank_deposit" v-model="payment_method" :class="{'p-invalid': payment_methodError}" />
+                                                    <label for="bank_deposit">Bank Deposit</label>
+                                                </div>
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="gcash" name="payment_method" value="gcash" v-model="payment_method" :class="{'p-invalid': payment_methodError}" />
+                                                    <label for="gcash">Gcash</label>
+                                                </div>
+                                                <div class="p-field-checkbox">
+                                                    <RadioButton id="paypal" name="payment_method" value="paypal" v-model="payment_method" :class="{'p-invalid': payment_methodError}" />
+                                                    <label for="paypal">Paypal</label>
+                                                </div>                                                                                  
+                                            </div>
+                                            <small class="p-error">{{ payment_methodError }}</small>
+                                        </div>
+                                    </div>                                    
+                                </div>                                
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                            </div>
                         </template>
                         <template #footer>
-                            <div class="lzds-center">
+                            <div class="lzds-center p-mt-2 p-mb-4">
                                 <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                                 <Button type="submit" icon="pi pi-check" label="Next" style="margin-left: .5em" />
                             </div>
@@ -39,6 +118,12 @@ import RadioButton from 'primevue/radiobutton/sfc'
 import InputText from 'primevue/inputtext/sfc'
 import Dropdown from 'primevue/dropdown/sfc'
 
+import DataTable from 'primevue/datatable/sfc';
+import Column from 'primevue/column/sfc';
+import ColumnGroup from 'primevue/columngroup/sfc';
+
+import { useForm, useField } from 'vee-validate'
+
 export default {
     components: {
         LayoutWrapper,
@@ -48,20 +133,110 @@ export default {
         RadioButton,
         InputText,
         Dropdown,
+        DataTable,
+        Column,
+        ColumnGroup,
     },
     setup() {
+
         const store = useStore()
         const router = useRouter()
         const toast = useToast()
 
-        console.log(store.state.studentStatus)
-        
+        console.log(`Status: ${store.state.studentStatus}, LRN: ${store.state.lrn}, STUDENT_ID: ${store.state.student_id}`)
+        const studentStatus = store.state.studentStatus
+        const newStudent = studentStatus == 'New'
+
+        store.dispatch('selections/LEVELS')
+        store.dispatch('selections/QUESTIONNAIRES')
+        /**
+         * If new student get fees for Nursery already
+         */
+        if (newStudent) store.dispatch('selections/FEES', {id: 1})
+
+        const init = {
+            initialValues: {
+                enrollment: {
+                    ...store.state.enrollments.enrollment,
+                    lrn: store.state.students.student.lrn,
+                    student_id: store.state.students.student.student_id,
+                    student_status: store.state.students.student.student_status,
+                    grade: (store.state.studentStatus=='New')?1:null,
+                    email_address: store.state.students.student.email_address,
+                }
+            }
+        }
+
+        const { setValues, handleSubmit, resetForm } = useForm(init);
+
+        function validateField(value) {
+            if (!value) {
+                return "This field is required";
+            }
+            return true;
+        }
+
+        function validField(value) {
+            return true;
+        }
+
+        const { value: id } = useField('enrollment.id',validField);
+        const { value: grade, errorMessage: gradeError } = useField('enrollment.grade',validateField);    
+        const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
+        const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
+
+        const onSubmit = handleSubmit((values, actions) => {
+            console.log(values)
+            const { enrollment } = values
+            store.dispatch('enrollments/ENROLL', enrollment)
+        })
+
+        const getFees = () => {
+            store.dispatch('selections/FEES', {id: grade.value})
+        }
+
         const back = () => {
-            router.push('/profile/new')
+            if (studentStatus == 'New') {
+                router.push(`/profile/new`)
+            }
+            if (studentStatus == 'Transferee') {
+                router.push(`/profile/transferee`)
+            }            
         }
         
         return {
-            back
+            id,
+            grade,
+            payment_mode,
+            payment_method,
+            gradeError,
+            payment_modeError,
+            payment_methodError,
+            onSubmit,
+            getFees,
+            back,
+            newStudent
+        }
+    },
+    computed: {
+        levels() {
+            return this.$store.state.selections.levels
+        },
+        fees() {
+            return this.$store.state.selections.fees
+        },
+        balance() {
+            let balance = this.$store.state.selections.fees.total - this.$store.state.selections.fees.down_payment
+            if (isNaN(balance)) balance = 0
+            return balance
+        }
+    },
+    methods: {
+        fullPayment() {
+            this.$store.dispatch('selections/FULL_PAYMENT')
+        },
+        downPayment() {
+            this.$store.dispatch('selections/DOWN_PAYMENT')
         }
     }
 }
@@ -70,18 +245,18 @@ export default {
 <style scoped>
 
     .lzds-width {
-        width: 80%;
+        width: 75%;
     }
 
     @media only screen and (max-width: 1200px) {
         .lzds-width {
-            width: 80%
+            width: 75%
         }
     }
 
     @media only screen and (max-width: 1024px) {
         .lzds-width {
-            width: 80%
+            width: 75%
         }
     }
 

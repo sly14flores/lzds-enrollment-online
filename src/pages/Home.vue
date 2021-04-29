@@ -7,6 +7,7 @@
                     <Card class="card-mt">
                         <template #title>
                             Please select status
+                            <hr />
                         </template>                
                         <template #content>
                             <div class="">
@@ -69,7 +70,7 @@ export default {
             store.dispatch('STUDENT_STATUS',studentStatus.value)
             switch (studentStatus.value) {
                 case 'Regular':
-                    router.push('/enroll')
+                    router.push('/query/student')
                 break;
 
                 case 'New':
@@ -77,7 +78,7 @@ export default {
                 break;
 
                 case 'Transferee':
-                    router.push('/profile/new')
+                    router.push('/profile/transferee')
                 break;
             }
         }

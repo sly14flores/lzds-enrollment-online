@@ -155,7 +155,7 @@ const mutations = {
     INIT(state) {
         state.enrollment = enrollment
     },    
-    ENROLLMENT(state,payload) {
+    ENROLL(state,payload) {
         state.enrollment = payload
     }    
 }
@@ -170,7 +170,7 @@ const actions = {
             //
         }
     },    
-    async STUDENT({commit, dispatch}, payload) {
+    async ENROLL({commit, dispatch}, payload) {
         try {
             const { data } = await enrollStudent(payload)
         } catch(error) {
