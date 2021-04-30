@@ -248,8 +248,7 @@ export default {
         const init = {
             initialValues: {
                 student: {
-                    // ...store.state.students.student,
-                    // student_status: store.state.studentStatus,                   
+                    // ...store.state.students.student,                  
                     ...store.state.students.testStudent,
                     student_status: studentStatus,               
                 }

@@ -2,25 +2,83 @@
     <LayoutWrapper>
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
-                <div class="p-grid">
-                    <div class="p-col-8 p-offset-2">
-                        <Card>
-                            <template #title>
-                                <p class="p-text-center">Student Information</p>
-                                <hr />                            
-                            </template>
-                            <template #content>
-
-                            </template>
-                            <template #footer>
-                                <div class="lzds-center p-mt-6 p-mb-4">
-                                    <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
-                                    <NextButton :loading="loading" style="margin-left: .5em" />
+                <Card>
+                    <template #title>
+                        <p class="p-text-center">Student Information</p>
+                        <hr />                            
+                    </template>
+                    <template #content>
+                        <div class="p-grid">
+                            <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
+                                <div class="p-grid p-mr-2">
+                                    <div class="p-col-6">
+                                        Name:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{fullname}}
+                                    </div>                                                                                                      
                                 </div>
-                            </template>                                             
-                        </Card>
-                    </div>
-                </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                   <div class="p-col-6">
+                                        Email:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.email_address}}
+                                    </div>                                                                       
+                                </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                    <div class="p-col-6">
+                                        Contact No:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.contact_no}}
+                                    </div>                                                                         
+                                </div>
+                            </div> 
+                            <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
+                                <div class="p-grid p-mr-2">
+                                    <div class="p-col-6">
+                                        LRN:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.lrn}}
+                                    </div>
+                                </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                    <div class="p-col-6">
+                                        Last SY Level/Grade:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.previous_level}}
+                                    </div>                                    
+                                </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                    <div class="p-col-6">
+                                        Enrolling in Grade/Level:
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.next_level}}
+                                    </div>                                    
+                                </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                    <div class="p-col-6">
+                                        Tuition Fee Discount(s):
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        <span class="p-d-inline-block">123412341234</span>
+                                        <span class="p-d-inline-block">123412341234</span>
+                                    </div>
+                                </div>                                                                                              
+                            </div>                                                      
+                        </div>             
+                    </template>
+                    <template #footer>
+                        <div class="lzds-center p-mt-6 p-mb-4">
+                            <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
+                            <NextButton :loading="loading" style="margin-left: .5em" @click="next" />
+                        </div>
+                    </template>                                             
+                </Card>
             </div>
         </div>
         <Footer />
@@ -33,7 +91,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useRoute } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
@@ -62,14 +120,29 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
-        const toast = useToast()        
+        const toast = useToast()
+        
+        const info = computed(() => {
+            return {...store.state.students.studentInfo}
+        })
+
+        const fullname = computed(() => {
+            return `${store.state.students.studentInfo.firstname} ${store.state.students.studentInfo.lastname}`
+        })
 
         const back = () => {
             router.push('/query/student')
         }
 
+        const next = () => {
+            router.push('/enrollment')
+        }
+
         return {
-            back
+            info,
+            fullname,
+            back,
+            next
         }
 
     },
@@ -84,30 +157,33 @@ export default {
 <style scoped>
 
     .lzds-width {
-        width: 80%;
+        width: 60%;
     }
 
     @media only screen and (max-width: 1200px) {
         .lzds-width {
-            width: 80%
+            width: 60%
         }
     }
 
     @media only screen and (max-width: 1024px) {
         .lzds-width {
-            width: 80%
+            width: 70%
         }
     }
 
     @media only screen and (max-width: 768px) {
         .lzds-width {
+            width: 80%
+        }
+        .p-xs-12 {
             width: 100%
         }
     }
 
     @media only screen and (max-width: 480px) {
         .lzds-width {
-            width: 100%
+            width: 80%
         }      
     }
 
@@ -121,6 +197,10 @@ export default {
         .lzds-width {
             width: 100%
         }    
+    }
+
+    .hl {
+        border: 1px solid red;
     }
 
 </style>

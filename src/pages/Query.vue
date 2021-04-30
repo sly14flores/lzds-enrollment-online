@@ -26,7 +26,7 @@
                                         </div>
                                     </template>
                                     <template #footer>
-                                        <div class="lzds-center p-mt-6 p-mb-4">
+                                        <div class="lzds-center p-mt-1 p-mb-4">
                                             <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                                             <NextButton :loading="loading" style="margin-left: .5em" />
                                         </div>
