@@ -65,8 +65,7 @@
                                         Tuition Fee Discount(s):
                                     </div>
                                     <div class="p-col-6 p-text-right p-text-bold">
-                                        <span class="p-d-inline-block">123412341234</span>
-                                        <span class="p-d-inline-block">123412341234</span>
+                                        <span class="p-d-block" v-for="(d, i) in info.discounts" :key="i">{{d}}</span>
                                     </div>
                                 </div>                                                                                              
                             </div>                                                      
@@ -121,13 +120,16 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const toast = useToast()
+
+        store.dispatch('selections/INIT')
+        store.dispatch('enrollments/INIT')         
         
         const info = computed(() => {
-            return {...store.state.students.studentInfo}
+            return {...store.state.students.student}
         })
 
         const fullname = computed(() => {
-            return `${store.state.students.studentInfo.firstname} ${store.state.students.studentInfo.lastname}`
+            return `${store.state.students.student.firstname} ${store.state.students.student.lastname}`
         })
 
         const back = () => {

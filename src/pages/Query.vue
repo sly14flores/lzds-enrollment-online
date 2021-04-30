@@ -83,10 +83,12 @@ export default {
         const toast = useToast()
 
         const studentStatus = 'Regular'
-        store.dispatch('students/STUDENT_INFO',{ id: 0 })
+
+        store.dispatch('selections/INIT')
+        store.dispatch('students/INIT')    
 
         watch(
-            () => store.state.students.studentInfo.id,
+            () => store.state.students.student.id,
             (data, prevData) => {
                 router.push('/student/info')
             }

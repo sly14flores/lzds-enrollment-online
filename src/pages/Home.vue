@@ -60,6 +60,7 @@ export default {
 
         const studentStatus = ref(null)
 
+        store.dispatch('selections/INIT')
         store.dispatch('students/INIT')
 
         const next = () => {

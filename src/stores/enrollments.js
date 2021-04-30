@@ -21,6 +21,8 @@ const enrollment = {
     payment_mode: null,
     payment_method: null,
     down_payment: null,
+    esc_voucher_grantee: null,
+    discount_amount: 0,
     questionnaires: []
 }
 
@@ -33,6 +35,8 @@ const testEnrollment = {
     payment_mode: "monthly",
     payment_method: "cash",
     down_payment: 10000,
+    esc_voucher_grantee: null,
+    discount_amount: 0,
     questionnaires: [
         {
             id: 1,
@@ -145,9 +149,12 @@ const testEnrollment = {
     ]
 }
 
+const loading = false
+
 const state = () => {
     return {
         enrollment,
+        loading,
     }
 }
 
@@ -157,7 +164,10 @@ const mutations = {
     },    
     ENROLL(state,payload) {
         state.enrollment = payload
-    }    
+    },
+    LOADING(state,payload) {
+        state.loading = payload
+    } 
 }
 
 const actions = {
@@ -171,8 +181,10 @@ const actions = {
         }
     },    
     async ENROLL({commit, dispatch}, payload) {
+        commit('LOADING',true)
         try {
             const { data } = await enrollStudent(payload)
+            commit('LOADING',false)
         } catch(error) {
             const { response } = error || {}
             dispatch('ERROR',response)
