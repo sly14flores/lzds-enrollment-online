@@ -4,6 +4,14 @@ import Enroll from './pages/Enrollment'
 import QueryStudent from './pages/Query'
 import StudentInfo from './pages/StudentInfo'
 
+/**
+ * Payment methods
+ */
+import PaymentCash from './pages/PaymentCash'
+import PaymentBank from './pages/PaymentBank'
+import PaymentGcash from './pages/PaymentGcash'
+import PaymentPaypal from './pages/PaymentPaypal'
+
 export default [
     {
         path: "/",
@@ -29,5 +37,25 @@ export default [
         path: "/student/info",
         name: "StudentInfo",
         component: StudentInfo,
-    },    
+    },
+    {
+        path: "/payment/cash",
+        name: "PaymentCash",
+        component: PaymentCash,        
+    },
+    {
+        path: "/payment/bank",
+        name: "PaymentBank",
+        component: PaymentBank,        
+    },
+    {
+        path: "/payment/gcash",
+        name: "PaymentGcash",
+        component: PaymentGcash,        
+    },
+    {
+        path: "/payment/paypal",
+        name: "PaymentPaypal",
+        component: PaymentPaypal,        
+    }         
 ]
