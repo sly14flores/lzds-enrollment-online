@@ -45,6 +45,11 @@ const student = {
     gp_lastname: null,
     gp_contact_no: null,
     indigent: false,
+    previous_level: null,
+    next_level: null,
+    previous_level_id: null,
+    next_level_id: null,
+    discounts: [],    
     updated_dt: null,
 }
 
@@ -74,10 +79,26 @@ const testStudent = {
     gp_middlename: "Guray",
     gp_lastname: "Flores",
     gp_contact_no: "1234",
+    indigent: false,
+    previous_level: null,
+    next_level: null,
+    previous_level_id: null,
+    next_level_id: null,
+    discounts: [],
+    updated_dt: null,    
 }
 
 const studentInfo = {
-    id: 0
+    id: 0,
+    firstname: null,
+    middlename: null,
+    lastname: null,
+    lrn: null,
+    previous_level: null,
+    next_level: null,
+    email_address: null,
+    contact_no: null,
+    discounts: []
 }
 
 const loading = false

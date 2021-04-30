@@ -67,7 +67,7 @@ export default {
                 toast.add({severity:'error', summary: 'Student status is required', detail:'Please select student status', life: 3000});
                 return
             }
-            store.dispatch('STUDENT_STATUS',studentStatus.value)
+            // store.dispatch('STUDENT_STATUS',studentStatus.value)
             switch (studentStatus.value) {
                 case 'Regular':
                     router.push('/query/student')

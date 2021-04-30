@@ -154,6 +154,8 @@ export default {
          */
         if (newStudent) store.dispatch('selections/FEES', {id: 1})
 
+        const level = (store.state.students.student.student_status=='New')?1:null
+
         const init = {
             initialValues: {
                 enrollment: {
@@ -161,7 +163,7 @@ export default {
                     lrn: store.state.students.student.lrn,
                     student_id: store.state.students.student.student_id,
                     student_status: store.state.students.student.student_status,
-                    grade: (store.state.studentStatus=='New')?1:null,
+                    grade: level,
                     email_address: store.state.students.student.email_address,
                 }
             }
