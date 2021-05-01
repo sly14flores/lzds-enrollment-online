@@ -65,7 +65,7 @@
                                         Tuition Fee Discount(s):
                                     </div>
                                     <div class="p-col-6 p-text-right p-text-bold">
-                                        <span class="p-d-block" v-for="(d, i) in info.discounts" :key="i">{{d}}</span>
+                                        <p class="p-d-block" v-for="(d, i) in info.discounts" :key="i">{{d}}</p>
                                     </div>
                                 </div>                                                                                              
                             </div>                                                      

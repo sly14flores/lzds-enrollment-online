@@ -23,6 +23,7 @@ const enrollment = {
     down_payment: null,
     esc_voucher_grantee: null,
     discount_amount: 0,
+    total_amount_to_pay: 0,
     questionnaires: []
 }
 
@@ -37,6 +38,7 @@ const testEnrollment = {
     down_payment: 10000,
     esc_voucher_grantee: null,
     discount_amount: 0,
+    total_amount_to_pay: 0, 
     questionnaires: [
         {
             id: 1,

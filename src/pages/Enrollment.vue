@@ -18,7 +18,7 @@
                                     </div>
                                     <div class="p-field p-col-4">
                                         <label class="p-text-bold">Total fees</label>
-                                        <InputText type="text" v-model="fees.total" :disabled="true" />                                           
+                                        <InputText type="text" v-model="totalFees" :disabled="true" />                                           
                                     </div>
                                     <div class="p-field p-col-4">
                                         <label class="p-text-bold">Down payment</label>
@@ -38,10 +38,22 @@
                                     <div class="p-field p-col-4">
                                         <div class="p-fluid p-formgrid p-grid">
                                             <div class="p-field p-col">
-                                                <label class="p-text-bold">Discount</label>
-                                                <InputText type="text" v-model="discount_amount" :disabled="true" />
+                                                <label class="p-text-bold">Discount {{(total_discounts_percentage>0)?`(${total_discounts_percentage*100}%)`:''}}</label>
+                                                <InputText type="text" v-model="discount" :disabled="true" />
                                             </div>
-                                        </div>                                           
+                                        </div>
+                                        <div class="p-fluid p-formgrid p-grid" v-if="payment_mode=='full'">
+                                            <div class="p-field p-col">
+                                                <label class="p-text-bold">Full Payment Discount (5%)</label>
+                                                <InputText type="text" v-model="fullPaymentDiscount" :disabled="true" />
+                                            </div>
+                                        </div>
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            <div class="p-field p-col">
+                                                <label class="p-text-bold">Total amount to pay</label>
+                                                <InputText type="text" v-model="totalAmountToPay" :disabled="true" />
+                                            </div>
+                                        </div>                                                                                                                     
                                         <div class="p-fluid p-formgrid p-grid">
                                             <div class="p-field p-col">
                                                 <label class="p-text-bold">Balance</label>
@@ -133,7 +145,7 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-import { ref, watch } from 'vue'
+import { watchEffect, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
@@ -190,17 +202,18 @@ export default {
         if (studentStatus==null) level = store.state.students.student.next_level_id
         if (studentStatus=='Transferee') level = null
 
-        if (level!=null) store.dispatch('selections/FEES', {id: level})        
+        if (level!=null) store.dispatch('selections/FEES', {id: level})
 
         const init = {
             initialValues: {
                 enrollment: {
                     ...store.state.enrollments.enrollment,
                     lrn: store.state.students.student.lrn,
-                    student_id: store.state.students.student.student_id,
+                    student_id: store.state.students.student.id,
                     student_status: store.state.students.student.student_status,
                     grade: level,
                     email_address: store.state.students.student.email_address,
+                    total_discounts_percentage: store.state.students.student.total_discounts_percentage
                 }
             }
         }
@@ -226,11 +239,17 @@ export default {
         }         
 
         const { value: id } = useField('enrollment.id',validField);
+        const { value: lrn } = useField('enrollment.lrn',validField);
+        const { value: student_id } = useField('enrollment.student_id',validField);
+        const { value: student_status } = useField('enrollment.student_status',validField);
+        const { value: email_address } = useField('enrollment.email_address',validField);
         const { value: grade, errorMessage: gradeError } = useField('enrollment.grade',validateField);    
         const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
         const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
-        const { value: esc_voucher_grantee, errorMessage: escError } = useField('student.esc_voucher_grantee',validateBool);        
-        const { value: discount_amount } = useField('student.discount_amount',validField);        
+        const { value: esc_voucher_grantee, errorMessage: escError } = useField('enrollment.esc_voucher_grantee',validateBool);        
+        const { value: discount_amount } = useField('enrollment.discount_amount',validField);
+        const { value: total_discounts_percentage } = useField('enrollment.total_discounts_percentage',validField);
+        const { value: total_amount_to_pay } = useField('enrollment.total_amount_to_pay',validField);
 
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
@@ -257,11 +276,17 @@ export default {
         
         return {
             id,
+            lrn,
+            student_id,
+            student_status,
+            email_address,         
             grade,
             payment_mode,
             payment_method,
             esc_voucher_grantee,
             discount_amount,
+            total_discounts_percentage,
+            total_amount_to_pay,
             gradeError,
             payment_modeError,
             payment_methodError,
@@ -279,10 +304,35 @@ export default {
         fees() {
             return this.$store.state.selections.fees
         },
+        totalFees() {
+            return parseFloat(this.$store.state.selections.fees.total.toFixed(2))
+        },
+        discount() {
+            let discount = this.$store.state.selections.fees.tuition_fee*this.total_discounts_percentage
+            if (isNaN(discount)) discount = 0
+            return parseFloat(discount.toFixed(2))         
+        },
+        fullPaymentDiscount() {
+            let fullPaymentDiscount = 0
+            if (this.payment_mode=='full') {
+                const discount = .05
+                fullPaymentDiscount = this.$store.state.selections.fees.tuition_fee*discount
+            }
+            return parseFloat(fullPaymentDiscount.toFixed(2))
+        },
+        totalAmountToPay() {
+            // total fees - all discounts - down payment
+            // let totalAmountToPay =  this.$store.state.selections.fees.total - this.discount - this.$store.state.selections.fees.down_payment - this.fullPaymentDiscount
+            let totalAmountToPay = this.$store.state.selections.fees.down_payment
+            if (this.payment_mode=='full') totalAmountToPay = totalAmountToPay - this.discount - this.fullPaymentDiscount            
+            if (isNaN(totalAmountToPay)) totalAmountToPay = 0
+            return parseFloat(totalAmountToPay.toFixed(2))
+        },
         balance() {
-            let balance = this.$store.state.selections.fees.total - this.$store.state.selections.fees.down_payment
+            let balance = this.$store.state.selections.fees.total - this.discount - this.$store.state.selections.fees.down_payment
             if (isNaN(balance)) balance = 0
-            return balance
+            if (balance < 0) balance = 0
+            return parseFloat(balance.toFixed(2))
         },
         loading() {
             return this.$store.state.selections.loading || this.$store.state.enrollments.loading

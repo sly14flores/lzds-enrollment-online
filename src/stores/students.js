@@ -50,6 +50,7 @@ const student = {
     previous_level_id: null,
     next_level_id: null,
     discounts: [],
+    total_discounts_percentage: 0,    
     updated_dt: null,
 }
 
@@ -85,6 +86,7 @@ const testStudent = {
     previous_level_id: null,
     next_level_id: null,
     discounts: ['w/Honors (10%)','w/High Honors (20%)'],
+    total_discounts_percentage: 0,    
     updated_dt: null,    
 }
 
