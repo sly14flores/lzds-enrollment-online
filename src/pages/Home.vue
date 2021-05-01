@@ -6,7 +6,7 @@
                 <div class="p-mx-auto lzds-width">
                     <Card class="card-mt">
                         <template #title>
-                            Please select status
+                            Please select your status
                             <hr />
                         </template>                
                         <template #content>
@@ -26,6 +26,7 @@
                             </div>
                         </template>
                         <template #footer>
+                            <hr />
                             <Button class="p-button-lg" label="Next" @click="next" />
                         </template>
                     </Card>         

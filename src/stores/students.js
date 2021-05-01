@@ -50,6 +50,7 @@ const student = {
     previous_level_id: null,
     next_level_id: null,
     discounts: [],
+    total_discounts_percentage: 0,    
     updated_dt: null,
 }
 
@@ -85,6 +86,7 @@ const testStudent = {
     previous_level_id: null,
     next_level_id: null,
     discounts: ['w/Honors (10%)','w/High Honors (20%)'],
+    total_discounts_percentage: 0,    
     updated_dt: null,    
 }
 
@@ -131,6 +133,12 @@ const mutations = {
         // state.student.gp_contact_no = payload.gp_contact_no   
         // state.student.updated_dt = payload.updated_dt
     },
+    QUERY_STUDENT(state,payload) {
+        state.student = {
+            ...payload,
+            student_status: 'Regular',
+        }
+    }    
 }
 
 const actions = {
@@ -159,7 +167,7 @@ const actions = {
         commit('LOADING',true)
         try {
             const { data: { data } } = await queryStudent(payload)
-            commit('STUDENT',data)
+            commit('QUERY_STUDENT',data)
             // commit('LOADING',false)
             Swal.fire({
                 // text: 'Record found',
@@ -176,8 +184,8 @@ const actions = {
             })            
         } catch(error) {
             const { response } = error || {}
-            const { statusText } = response || {}
-            const message = statusText || 'Something went wrong'
+            const { status, data } = response || {}
+            const { message } = data || {}
             Swal.fire({
                 // text: 'No record found in our database',
                 html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">${message}</div>`,                    

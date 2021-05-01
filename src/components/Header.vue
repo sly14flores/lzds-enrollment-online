@@ -1,16 +1,23 @@
 <template>
-    <!-- <div class="layout-topbar">
-        <img src="https://cdn.lzds.edu.ph/images/lzds-logo-small.png" class="logo" />
-    </div> -->
-    <div class="p-mt-3 header">
-      <img src="https://cdn.lzds.edu.ph/images/lzds-logo.png" class="logo" />
-      <h3>Online Enrollment System</h3>
+    <div class="p-mt-2 header">
+      <img :src="logo" class="logo" />
+      <h3 style="color: #fff; margin-top: 0">Online Enrollment System</h3>
+      <span class="p-d-inline-block" style="color: #fff; margin-top: 0">SY: 2021-22</span>
     </div>
 </template>
 
 <script>
+
+import logo from '../assets/lzds-logo.png'
+
 export default {
-    
+  setup() {
+
+    return {
+      logo
+    }
+
+  }    
 }
 </script>
 

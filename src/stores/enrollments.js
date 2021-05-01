@@ -1,6 +1,7 @@
 import { apiUrl } from '../url.js'
 // import route from '../library/route'
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 /**
  * APIs
@@ -23,6 +24,8 @@ const enrollment = {
     down_payment: null,
     esc_voucher_grantee: null,
     discount_amount: 0,
+    discount_percentage: 0,
+    total_amount_to_pay: 0,
     questionnaires: []
 }
 
@@ -37,6 +40,8 @@ const testEnrollment = {
     down_payment: 10000,
     esc_voucher_grantee: null,
     discount_amount: 0,
+    discount_percentage: 0,    
+    total_amount_to_pay: 0,
     questionnaires: [
         {
             id: 1,
@@ -174,10 +179,28 @@ const actions = {
     INIT({commit}) {
         commit('INIT')
     },
-    ERROR(payload) {
-        const { message, status } = payload
+    ERROR({commit},payload) {
+        const { status, data } = payload
+        const { message } = data
+        const icon = (status==406)?'info':'error'
+        const html = (status==406)?
+                    `<div style="padding-left: 35px; margin-top: -35px; color:#afdbbf">${message}</div>`:
+                    `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">${message}</div>`
+        const background = (status==406)?'#078a3b':'#e8c2cf'
+
         if (message) {
-            //
+            Swal.fire({
+                html: html,
+                icon: icon,
+                toast: 'true',
+                // position: 'top-right',
+                position: 'top',
+                showConfirmButton: false,
+                showCancelButton: false,
+                background: background,
+                padding: '1.5rem',
+                timer: 2000,
+            }) 
         }
     },    
     async ENROLL({commit, dispatch}, payload) {
@@ -186,8 +209,10 @@ const actions = {
             const { data } = await enrollStudent(payload)
             commit('LOADING',false)
         } catch(error) {
+            commit('LOADING',false)
             const { response } = error || {}
-            dispatch('ERROR',response)
+            const { status, data } = response || null
+            dispatch('ERROR',{status, data})
         }
     }
 }
