@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="p-grid p-jc-center p-mt-6">
             <div class="p-lg-9 p-sm-12">
                 <form @submit="onSubmit">
@@ -193,6 +194,7 @@ import { useToast } from "primevue/usetoast"
 import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 
 import Card from 'primevue/card/sfc'
@@ -203,11 +205,12 @@ import Dropdown from 'primevue/dropdown/sfc'
 import BlockUI from 'primevue/blockui/sfc'
 import NextButton from '../components/NextButton'
 
-import { useForm, useField } from 'vee-validate'
+import { useForm, useIsFormValid, useField } from 'vee-validate'
 
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
@@ -259,12 +262,13 @@ export default {
                 student: {
                     // ...store.state.students.student,                  
                     ...store.state.students.testStudent,
-                    student_status: studentStatus,               
+                    student_status: studentStatus,            
                 }
             }
         }
 
-        const { setValues, handleSubmit, resetForm } = useForm(init);
+        const {  handleSubmit } = useForm(init);
+        const isValid = useIsFormValid()
         
         function validateField(value) {
             if (!value) {
@@ -312,6 +316,7 @@ export default {
 
         const { value: region } = useField('student.region',validField);
         const { value: student_status } = useField('student.student_status',validField);
+        const { value: total_discounts_percentage } = useField('student.total_discounts_percentage',validField);
 
         // const region = "01"
         // const student_status = store.state.studentStatus
@@ -331,6 +336,13 @@ export default {
             const { student } = values
             store.dispatch('students/STUDENT', student)
         })
+
+        const submitForm = () => {
+            if (!isValid.value) {
+                toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
+            }
+            onSubmit()
+        }        
 
         const back = () => {
             router.push('/')
@@ -361,7 +373,8 @@ export default {
             gp_firstname,
             gp_middlename,
             gp_lastname,
-            gp_contact_no, 
+            gp_contact_no,
+            total_discounts_percentage,
             indigent,
             lrnError,
             // escError,
@@ -382,7 +395,7 @@ export default {
             gp_contact_noError,
             fetchCities,
             fetchBarangays,
-            onSubmit,
+            submitForm,
             back,
         }
 
