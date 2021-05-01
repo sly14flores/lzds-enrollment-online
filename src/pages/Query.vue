@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />        
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form @submit="onSubmit">
@@ -52,6 +53,7 @@ import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
+import TopBar from '../components/TopBar'
 import NextButton from '../components/NextButton'
 
 import Card from 'primevue/card/sfc'
@@ -67,6 +69,7 @@ export default {
     components: {
         LayoutWrapper,
         Footer,
+        TopBar,
         Card,
         Button,
         RadioButton,

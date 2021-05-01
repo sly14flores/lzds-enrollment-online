@@ -2,7 +2,7 @@
     <LayoutWrapper>
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
-                <form @submit="onSubmit">
+                <form @submit.prevent="submitForm">
                     <BlockUI :blocked="loading">
                         <Card>
                             <template #title>
@@ -22,7 +22,7 @@
                                     </div>
                                     <div class="p-field p-col-4">
                                         <label class="p-text-bold">Down payment</label>
-                                        <InputText type="text" v-model="fees.down_payment" />                                           
+                                        <InputText type="text" v-model="fees.down_payment" :disabled="payment_mode=='full'"/>                                           
                                     </div>                                                                                 
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
@@ -145,7 +145,7 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-import { watchEffect, computed } from 'vue'
+import { watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
@@ -162,7 +162,7 @@ import DataTable from 'primevue/datatable/sfc';
 import Column from 'primevue/column/sfc';
 import ColumnGroup from 'primevue/columngroup/sfc';
 
-import { useForm, useField } from 'vee-validate'
+import { useForm, useIsFormValid, useField } from 'vee-validate'
 
 export default {
     components: {
@@ -218,7 +218,8 @@ export default {
             }
         }
 
-        const { setValues, handleSubmit, resetForm } = useForm(init);
+        const { handleSubmit } = useForm(init)
+        const isValid = useIsFormValid()
 
         function validateField(value) {
             if (!value) {
@@ -236,7 +237,7 @@ export default {
                 return "This field is required";
             }
             return true;
-        }         
+        }
 
         const { value: id } = useField('enrollment.id',validField);
         const { value: lrn } = useField('enrollment.lrn',validField);
@@ -253,9 +254,16 @@ export default {
 
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
-            const { enrollment } = values
-            store.dispatch('enrollments/ENROLL', enrollment)
+            // const { enrollment } = values
+            // store.dispatch('enrollments/ENROLL', enrollment)
         })
+
+        const submitForm = () => {
+            if (!isValid.value) {
+                toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
+            }
+            onSubmit()
+        }
 
         const getFees = () => {
             store.dispatch('selections/FEES', {id: grade.value})
@@ -264,7 +272,7 @@ export default {
         const back = () => {
             console.log(studentStatus)
             if (studentStatus == 'New') {
-                router.push(`/profile/new`)
+                router.push('/profile/new')
             }
             if (studentStatus == 'Transferee') {
                 router.push('/profile/transferee')
@@ -291,10 +299,11 @@ export default {
             payment_modeError,
             payment_methodError,
             escError,
-            onSubmit,
+            submitForm,
             getFees,
             back,
-            newStudent
+            newStudent,
+            isValid
         }
     },
     computed: {
@@ -305,7 +314,10 @@ export default {
             return this.$store.state.selections.fees
         },
         totalFees() {
-            return parseFloat(this.$store.state.selections.fees.total.toFixed(2))
+            const totalFees = this.$store.state.selections.fees.total || 0
+            const total = totalFees && parseFloat(totalFees.toFixed(2))
+            // return parseFloat(this.$store.state.selections.fees.total.toFixed(2))
+            return total
         },
         discount() {
             let discount = this.$store.state.selections.fees.tuition_fee*this.total_discounts_percentage

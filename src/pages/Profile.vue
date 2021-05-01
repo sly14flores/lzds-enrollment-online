@@ -2,7 +2,7 @@
     <LayoutWrapper>
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
-                <form @submit="onSubmit">
+                <form @submit.prevent="submitForm">
                     <BlockUI :blocked="loading">
                         <Card>
                             <template #title>
@@ -203,7 +203,7 @@ import Dropdown from 'primevue/dropdown/sfc'
 import BlockUI from 'primevue/blockui/sfc'
 import NextButton from '../components/NextButton'
 
-import { useForm, useField } from 'vee-validate'
+import { useForm, useIsFormValid, useField } from 'vee-validate'
 
 export default {
     components: {
@@ -264,7 +264,8 @@ export default {
             }
         }
 
-        const { setValues, handleSubmit, resetForm } = useForm(init);
+        const {  handleSubmit } = useForm(init);
+        const isValid = useIsFormValid()
         
         function validateField(value) {
             if (!value) {
@@ -312,6 +313,7 @@ export default {
 
         const { value: region } = useField('student.region',validField);
         const { value: student_status } = useField('student.student_status',validField);
+        const { value: total_discounts_percentage } = useField('student.total_discounts_percentage',validField);
 
         // const region = "01"
         // const student_status = store.state.studentStatus
@@ -331,6 +333,13 @@ export default {
             const { student } = values
             store.dispatch('students/STUDENT', student)
         })
+
+        const submitForm = () => {
+            if (!isValid.value) {
+                toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
+            }
+            onSubmit()
+        }        
 
         const back = () => {
             router.push('/')
@@ -361,7 +370,8 @@ export default {
             gp_firstname,
             gp_middlename,
             gp_lastname,
-            gp_contact_no, 
+            gp_contact_no,
+            total_discounts_percentage,
             indigent,
             lrnError,
             // escError,
@@ -382,7 +392,7 @@ export default {
             gp_contact_noError,
             fetchCities,
             fetchBarangays,
-            onSubmit,
+            submitForm,
             back,
         }
 
