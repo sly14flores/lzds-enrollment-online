@@ -18,4 +18,8 @@ export default {
   border: 1px solid red;
 }
 
+.layout-wrapper{
+  overflow-x: hidden;
+}
+
 </style>

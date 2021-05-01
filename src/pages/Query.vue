@@ -1,24 +1,24 @@
 <template>
     <LayoutWrapper>
-        <div class="layout-main">
-            <div class="lzds-width p-mx-auto">
+        <div class="p-grid p-jc-center p-mt-6">
+            <div class="p-lg-6 p-sm-12">
                 <form @submit="onSubmit">
                     <div class="p-grid">
-                        <div class="p-col-6 p-offset-3">
+                        <div class="p-col-12 p-md-12">
                             <BlockUI :blocked="blocked">
-                                <Card>
-                                    <template #title>
-                                        <p class="p-text-center">Retrieve your Student Information</p>
-                                        <hr />                            
-                                    </template>
+                                <Card class="card">
                                     <template #content>
+                                        <div class="p-grid p-jc-center">
+                                            <h4 class="p-text-center p-text-bold">Retrieve your Student Information</h4>
+                                        </div>
+                                        <hr />
                                         <div class="p-fluid p-formgrid p-grid">
-                                            <div class="p-field p-md-12 p-lg-6">
+                                            <div class="p-field p-col-12 p-md-6">
                                                 <label class="p-text-uppercase">Learner Reference Number</label>
                                                 <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
                                                 <small class="p-error" v-if="lrnError">Please enter your Learner Reference Number</small>                                    
                                             </div>
-                                            <div class="p-field p-md-12 p-lg-6">
+                                            <div class="p-field p-col-12 p-md-6">
                                                 <label class="p-text-uppercase">Date of birth</label>
                                                 <InputText type="date" v-model="birthday" :class="{'p-invalid': birthdayError}" />
                                                 <small class="p-error" v-if="birthdayError">Please enter your date of birth</small>                                    
@@ -147,6 +147,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .card {
+        border-top: 4px solid #252a83;
+    }
 
     .lzds-width {
         width: 80%;
