@@ -57,5 +57,5 @@ export default [
         path: "/payment/paypal",
         name: "PaymentPaypal",
         component: PaymentPaypal,        
-    }         
+    }   
 ]

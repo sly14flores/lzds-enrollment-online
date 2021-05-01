@@ -4,7 +4,7 @@
             <div class="lzds-width p-mx-auto">
                 <form>
                     <div class="p-grid">
-                        <div class="p-col-6 p-offset-3">
+                        <div class="p-col-8 p-offset-2">
                             <BlockUI :blocked="false">
                                 <Card>
                                     <template #title>
@@ -12,7 +12,50 @@
                                         <hr />                            
                                     </template>
                                     <template #content>
-                                        <!-- total amount to pay -->
+                                        <div class="p-grid">
+                                            <div class="p-lg-12 p-sm-12">
+                                                <div class="p-grid">
+                                                    <div class="p-lg-12 p-mb-3">
+                                                        <div class="p-text-normal p-name">Reference Number</div>
+                                                        <div class="p-text-bold p-total-number">101070110017</div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid">
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Name of Student</div>
+                                                        <div class="p-text-bold p-total-number">Juan Dela Cruz</div>
+                                                    </div>
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Birthdate</div>
+                                                        <div class="p-text-bold p-total-number">June 10, 2006</div>
+                                                    </div>
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Gender</div>
+                                                        <div class="p-text-bold p-total-number">Male</div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid">
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Parent/Guardian</div>
+                                                        <div class="p-text-bold p-total-number">Two Dela Cruz</div>
+                                                    </div>
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Relationship</div>
+                                                        <div class="p-text-bold p-total-number">Father</div>
+                                                    </div>
+                                                    <div class="p-lg-4 p-mb-3">
+                                                        <div class="p-text-normal p-name">Contact Number</div>
+                                                        <div class="p-text-bold p-total-number">0925689854</div>
+                                                    </div>
+                                                </div>
+                                                <div class="p-grid">
+                                                    <div class="p-lg-12">
+                                                        <div class="p-text-normal p-name">Total amount</div>
+                                                        <div class="p-text-bold p-total-number">9,209</div>
+                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </template>
                                     <template #footer>
                                         <div class="lzds-center p-mt-1 p-mb-4">
@@ -105,6 +148,12 @@ export default {
         .lzds-width {
             width: 100%
         }    
+    }
+    .p-name{
+        font-size: 16px;
+    }
+    .p-total-number{
+        font-size: 20px;
     }
 
 </style>
