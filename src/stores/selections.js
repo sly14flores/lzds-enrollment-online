@@ -65,6 +65,8 @@ const fees = []
 const questionnaires = []
 const down_payment = 0
 
+const loading = false
+
 const state = () => {
     return {
         regions,
@@ -76,7 +78,8 @@ const state = () => {
         levels,
         fees,
         questionnaires,
-        down_payment
+        down_payment,
+        loading
     }
 }
 
@@ -115,6 +118,7 @@ const mutations = {
     },
     FEES(state, payload) {
         state.fees = payload
+        state.down_payment = payload.down_payment
     },
     QUESTIONNAIRES(state, payload) {
         state.questionnaires = payload
@@ -124,7 +128,10 @@ const mutations = {
     },
     DOWN_PAYMENT(state) {
         state.fees.down_payment = state.down_payment
-    },    
+    },
+    LOADING(state,payload) {
+        state.loading = payload
+    }
 }
 
 const actions = {
@@ -148,31 +155,40 @@ const actions = {
     },
     async PROVINCES({commit, dispatch}, payload) {
         const { code } = payload
+        commit('LOADING',true)
         try {
             const { data: { data } } = await getProvinces({code})
+            commit('LOADING',false)
             commit('PROVINCES', data)
         } catch(error) {
             const { response } = error || {}
+            commit('LOADING',false)
             dispatch('ERROR',response)
         }
     },
     async CITIES({commit, dispatch}, payload) {
         const { code } = payload
+        commit('LOADING',true)
         try {
             const { data: { data } } = await getCities({code})
+            commit('LOADING',false)
             commit('CITIES', data)
         } catch(error) {
             const { response } = error || {}
+            commit('LOADING',false)
             dispatch('ERROR',response)
         }
     },
     async BARANGAYS({commit, dispatch}, payload) {
         const { code } = payload
+        commit('LOADING',true)
         try {
             const { data: { data } } = await getBarangays({code})
+            commit('LOADING',false)
             commit('BARANGAYS', data)
         } catch(error) {
             const { response } = error || {}
+            commit('LOADING',false)
             dispatch('ERROR',response)
         }
     },
@@ -205,11 +221,14 @@ const actions = {
     },
     async FEES({commit, dispatch}, payload) {
         const { id } = payload
+        commit('LOADING',true)
         try {
             const { data: { data } } = await getFees({id})
+            commit('LOADING',false)
             commit('FEES', data)
         } catch(error) {
             const { response } = error || {}
+            commit('LOADING',false)
             dispatch('ERROR',response)
         }
     },
@@ -227,6 +246,9 @@ const actions = {
     },
     DOWN_PAYMENT({commit}) {
         commit('DOWN_PAYMENT')
+    },
+    LOADING({commit},payload) {
+        commit('LOADING',payload)
     }
 }
 

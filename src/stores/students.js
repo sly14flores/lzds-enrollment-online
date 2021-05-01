@@ -21,7 +21,7 @@ const queryStudent = (payload) => {
 const student = {
     id: 0,
     lrn: null,
-    esc_voucher_grantee: null,
+    // esc_voucher_grantee: null,
     lastname: null,
     firstname: null,
     middlename: null,
@@ -49,14 +49,14 @@ const student = {
     next_level: null,
     previous_level_id: null,
     next_level_id: null,
-    discounts: [],    
+    discounts: [],
     updated_dt: null,
 }
 
 const testStudent = {
     id: 1143,
     lrn:"123412341234",
-    esc_voucher_grantee: false,
+    // esc_voucher_grantee: false,
     lastname: "Flores",
     firstname: "Sly",
     middlename: "Bulilan",
@@ -84,21 +84,8 @@ const testStudent = {
     next_level: null,
     previous_level_id: null,
     next_level_id: null,
-    discounts: [],
+    discounts: ['w/Honors (10%)','w/High Honors (20%)'],
     updated_dt: null,    
-}
-
-const studentInfo = {
-    id: 0,
-    firstname: null,
-    middlename: null,
-    lastname: null,
-    lrn: null,
-    previous_level: null,
-    next_level: null,
-    email_address: null,
-    contact_no: null,
-    discounts: []
 }
 
 const loading = false
@@ -108,14 +95,12 @@ const state = () => {
         student,
         testStudent,
         loading,
-        studentInfo
     }
 }
 
 const mutations = {
     INIT(state) {
         state.student = {...student}
-        state.studentInfo = {...studentInfo}
         state.loading = false
     },
     LOADING(state,payload) {
@@ -146,9 +131,6 @@ const mutations = {
         // state.student.gp_contact_no = payload.gp_contact_no   
         // state.student.updated_dt = payload.updated_dt
     },
-    STUDENT_INFO(state,payload) {
-        state.studentInfo = payload
-    }
 }
 
 const actions = {
@@ -163,8 +145,10 @@ const actions = {
         commit('LOADING',false)
     },    
     async STUDENT({commit, dispatch}, payload) {
+        commit('LOADING',true)
         try {
             const { data: { data } } = await newProfile(payload)
+            commit('LOADING',false)
             commit('STUDENT', data)
         } catch(error) {
             const { response } = error || {}
@@ -175,10 +159,10 @@ const actions = {
         commit('LOADING',true)
         try {
             const { data: { data } } = await queryStudent(payload)
-            commit('STUDENT_INFO',data)
-            commit('LOADING',false)
+            commit('STUDENT',data)
+            // commit('LOADING',false)
             Swal.fire({
-                // text: 'No record found in our database',
+                // text: 'Record found',
                 html: '<div style="padding-left: 35px; margin-top: -35px; color:#afdbbf">Record found</div>',                    
                 icon: 'success',
                 toast: 'true',
@@ -192,9 +176,11 @@ const actions = {
             })            
         } catch(error) {
             const { response } = error || {}
+            const { statusText } = response || {}
+            const message = statusText || 'Something went wrong'
             Swal.fire({
                 // text: 'No record found in our database',
-                html: '<div style="padding-left: 35px; margin-top: -35px; color:#d10926">No record found in our database</div>',                    
+                html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">${message}</div>`,                    
                 icon: 'error',
                 toast: 'true',
                 // position: 'top-right',
@@ -208,9 +194,6 @@ const actions = {
             dispatch('ERROR',response)
         }
     },
-    STUDENT_INFO({commit},payload) {
-        commit('STUDENT_INFO',payload)
-    }
 }
 
 const getters = {}
