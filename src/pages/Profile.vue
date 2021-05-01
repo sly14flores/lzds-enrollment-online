@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form @submit.prevent="submitForm">
@@ -193,6 +194,7 @@ import { useToast } from "primevue/usetoast"
 import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 
 import Card from 'primevue/card/sfc'
@@ -208,6 +210,7 @@ import { useForm, useIsFormValid, useField } from 'vee-validate'
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
@@ -259,7 +262,7 @@ export default {
                 student: {
                     // ...store.state.students.student,                  
                     ...store.state.students.testStudent,
-                    student_status: studentStatus,               
+                    student_status: studentStatus,            
                 }
             }
         }

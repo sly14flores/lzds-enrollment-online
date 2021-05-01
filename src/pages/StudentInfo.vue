@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <Card>
@@ -69,10 +70,16 @@
                                     </div>
                                 </div>                                                                                              
                             </div>                                                      
-                        </div>             
+                        </div>
+                        <div class="p-grid p-mt-3">
+                            <div class="p-col">
+                                <p class="p-text-light p-text-italic">If your information is correct click Next to proceed to your enrollment</p>
+                            </div>
+                        </div>           
                     </template>
                     <template #footer>
-                        <div class="lzds-center p-mt-6 p-mb-4">
+                        <hr />
+                        <div class="lzds-center p-mb-4">
                             <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                             <NextButton :loading="loading" style="margin-left: .5em" @click="next" />
                         </div>
@@ -93,6 +100,7 @@ import { useToast } from "primevue/usetoast"
 import { ref, watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 import NextButton from '../components/NextButton'
 
@@ -106,6 +114,7 @@ import Dropdown from 'primevue/dropdown/sfc'
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
@@ -121,9 +130,15 @@ export default {
         const route = useRoute()
         const toast = useToast()
 
+        if (store.state.students.student.id==0) {
+            router.push('/')
+            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current to avoid losing of information while on session', life: 10000});            
+        }        
+
         store.dispatch('selections/INIT')
         store.dispatch('enrollments/INIT')         
         
+        console.log(store.state.students.student)
         const info = computed(() => {
             return {...store.state.students.student}
         })

@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form @submit.prevent="submitForm">
@@ -22,23 +23,35 @@
                                     </div>
                                     <div class="p-field p-col-4">
                                         <label class="p-text-bold">Down payment</label>
-                                        <InputText type="text" v-model="fees.down_payment" :disabled="payment_mode=='full'"/>                                           
+                                        <InputText type="text" v-model="downPayment" :disabled="payment_mode=='full'"/>                                           
                                     </div>                                                                                 
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-col-8">
                                         <lable class="p-text-bold">Fees Details</lable>
-                                        <DataTable class="p-mt-2" :value="fees.fees" showGridlines responsiveLayout="scroll">                                    
-                                            <Column field="no" header="#"></Column>
-                                            <Column field="category" header="Category"></Column>
-                                            <Column field="description" header="Description"></Column>
-                                            <Column field="amount" header="Amount"></Column>
-                                        </DataTable>                                    
+                                        <div class="p-fluid p-formgrid p-grid">
+                                            <div class="p-sm-12 p-md-12 p-lg-6">
+                                                <DataTable class="p-datatable-sm" :value="leftFees" showGridlines responsiveLayout="scroll">                                    
+                                                    <Column field="no" header="#"></Column>
+                                                    <!-- <Column field="category" header="Category"></Column> -->
+                                                    <Column field="description" header="Description"></Column>
+                                                    <Column field="amount" header="Amount"></Column>
+                                                </DataTable>
+                                            </div>
+                                            <div class="p-sm-12 p-md-12 p-lg-6">
+                                                <DataTable class="p-datatable-sm" :value="rightFees" showGridlines responsiveLayout="scroll">                                    
+                                                    <Column field="no" header="#"></Column>
+                                                    <!-- <Column field="category" header="Category"></Column> -->
+                                                    <Column field="description" header="Description"></Column>
+                                                    <Column field="amount" header="Amount"></Column>
+                                                </DataTable>                                                
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="p-field p-col-4">
                                         <div class="p-fluid p-formgrid p-grid">
                                             <div class="p-field p-col">
-                                                <label class="p-text-bold">Discount {{(total_discounts_percentage>0)?`(${total_discounts_percentage*100}%)`:''}}</label>
+                                                <label class="p-text-bold">Discount {{(discount_percentage>0)?`(${discount_percentage*100}%)`:''}}</label>
                                                 <InputText type="text" v-model="discount" :disabled="true" />
                                             </div>
                                         </div>
@@ -69,11 +82,11 @@
                                                         <label for="Full">Full Payment</label>
                                                     </div>
                                                     <div class="p-field-checkbox">
-                                                        <RadioButton id="Quarterly" name="payment_mode" value="quarterly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="downPayment" />
+                                                        <RadioButton id="Quarterly" name="payment_mode" value="quarterly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="notFullPayment" />
                                                         <label for="Quarterly">Quarterly Payment</label>
                                                     </div>
                                                     <div class="p-field-checkbox">
-                                                        <RadioButton id="Monthly" name="payment_mode" value="monthly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="downPayment" />
+                                                        <RadioButton id="Monthly" name="payment_mode" value="monthly" v-model="payment_mode" :class="{'p-invalid': payment_modeError}" @click="notFullPayment" />
                                                         <label for="Monthly">Monthly Payment</label>
                                                     </div>                                        
                                                 </div>
@@ -126,6 +139,7 @@
                                 </div>
                             </template>
                             <template #footer>
+                                <hr />
                                 <div class="lzds-center p-mt-2 p-mb-4">
                                     <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                                     <NextButton :loading="loading" style="margin-left: .5em" />
@@ -148,6 +162,7 @@ import { useToast } from "primevue/usetoast"
 import { watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 
 import Card from 'primevue/card/sfc'
@@ -167,6 +182,7 @@ import { useForm, useIsFormValid, useField } from 'vee-validate'
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
@@ -189,12 +205,17 @@ export default {
         const studentStatus = store.state.students.student.student_status
         const newStudent = studentStatus == 'New'
 
+        if (store.state.students.student.id===0) {
+            router.push('/')
+            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current page to avoid losing of information while on session', life: 10000});
+        }
+
         store.dispatch('selections/LEVELS')
         store.dispatch('selections/QUESTIONNAIRES')
         /**
          * If new student get fees for Nursery already
          */
-        let level = 1    
+        let level = 1 
         /**
          * If regular student set grade to next_level_id
          * Set fees per next level
@@ -204,6 +225,7 @@ export default {
 
         if (level!=null) store.dispatch('selections/FEES', {id: level})
 
+        console.log(store.state.students.student)
         const init = {
             initialValues: {
                 enrollment: {
@@ -213,7 +235,7 @@ export default {
                     student_status: store.state.students.student.student_status,
                     grade: level,
                     email_address: store.state.students.student.email_address,
-                    total_discounts_percentage: store.state.students.student.total_discounts_percentage
+                    discount_percentage: store.state.students.student.total_discounts_percentage
                 }
             }
         }
@@ -248,14 +270,15 @@ export default {
         const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
         const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
         const { value: esc_voucher_grantee, errorMessage: escError } = useField('enrollment.esc_voucher_grantee',validateBool);        
+        const { value: down_payment } = useField('enrollment.down_payment',validField);
         const { value: discount_amount } = useField('enrollment.discount_amount',validField);
-        const { value: total_discounts_percentage } = useField('enrollment.total_discounts_percentage',validField);
+        const { value: discount_percentage } = useField('enrollment.discount_percentage',validField);
         const { value: total_amount_to_pay } = useField('enrollment.total_amount_to_pay',validField);
 
         const onSubmit = handleSubmit((values, actions) => {
-            console.log(values)
-            // const { enrollment } = values
-            // store.dispatch('enrollments/ENROLL', enrollment)
+            const { enrollment } = values
+            console.log(enrollment)
+            store.dispatch('enrollments/ENROLL', enrollment)
         })
 
         const submitForm = () => {
@@ -270,14 +293,13 @@ export default {
         }
 
         const back = () => {
-            console.log(studentStatus)
             if (studentStatus == 'New') {
                 router.push('/profile/new')
             }
             if (studentStatus == 'Transferee') {
                 router.push('/profile/transferee')
             }
-            if (studentStatus == null) {
+            if (studentStatus == null || studentStatus == 'Regular') {
                 router.push('/student/info')
             }
         }
@@ -292,8 +314,9 @@ export default {
             payment_mode,
             payment_method,
             esc_voucher_grantee,
+            down_payment,
             discount_amount,
-            total_discounts_percentage,
+            discount_percentage,
             total_amount_to_pay,
             gradeError,
             payment_modeError,
@@ -313,15 +336,23 @@ export default {
         fees() {
             return this.$store.state.selections.fees
         },
+        leftFees() {
+            return this.$store.state.selections.fees.fees && this.$store.state.selections.fees.fees.slice(0,12)
+        },
+        rightFees() {
+            return this.$store.state.selections.fees.fees && this.$store.state.selections.fees.fees.slice(12,25)
+        },
         totalFees() {
             const totalFees = this.$store.state.selections.fees.total || 0
             const total = totalFees && parseFloat(totalFees.toFixed(2))
-            // return parseFloat(this.$store.state.selections.fees.total.toFixed(2))
             return total
         },
+        downPayment() {
+            return this.$store.state.selections.fees.down_payment
+        },
         discount() {
-            let discount = this.$store.state.selections.fees.tuition_fee*this.total_discounts_percentage
-            if (isNaN(discount)) discount = 0
+            let discount = this.$store.state.selections.fees.tuition_fee*this.discount_percentage
+            if (isNaN(discount)) discount = 0            
             return parseFloat(discount.toFixed(2))         
         },
         fullPaymentDiscount() {
@@ -333,8 +364,6 @@ export default {
             return parseFloat(fullPaymentDiscount.toFixed(2))
         },
         totalAmountToPay() {
-            // total fees - all discounts - down payment
-            // let totalAmountToPay =  this.$store.state.selections.fees.total - this.discount - this.$store.state.selections.fees.down_payment - this.fullPaymentDiscount
             let totalAmountToPay = this.$store.state.selections.fees.down_payment
             if (this.payment_mode=='full') totalAmountToPay = totalAmountToPay - this.discount - this.fullPaymentDiscount            
             if (isNaN(totalAmountToPay)) totalAmountToPay = 0
@@ -350,11 +379,22 @@ export default {
             return this.$store.state.selections.loading || this.$store.state.enrollments.loading
         }        
     },
+    watch: {
+      totalAmountToPay(newValue, oldValue) {
+          this.total_amount_to_pay = newValue
+      },
+      downPayment(newValue, oldValue) {
+          this.down_payment = newValue
+      },
+      discount(newValue, oldValue) {
+          this.discount_amount = newValue
+      }
+    },    
     methods: {
         fullPayment() {
             this.$store.dispatch('selections/FULL_PAYMENT')
         },
-        downPayment() {
+        notFullPayment() {
             this.$store.dispatch('selections/DOWN_PAYMENT')
         }
     },
@@ -364,12 +404,12 @@ export default {
 <style scoped>
 
     .lzds-width {
-        width: 75%;
+        width: 80%;
     }
 
     @media only screen and (max-width: 1200px) {
         .lzds-width {
-            width: 75%
+            width: 80%
         }
     }
 

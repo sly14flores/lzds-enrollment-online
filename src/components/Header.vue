@@ -1,7 +1,8 @@
 <template>
-    <div class="p-mt-1 header">
+    <div class="p-mt-2 header">
       <img :src="logo" class="logo" />
       <h3 style="color: #fff; margin-top: 0">Online Enrollment System</h3>
+      <span class="p-d-inline-block" style="color: #fff; margin-top: 0">SY: 2021-22</span>
     </div>
 </template>
 
