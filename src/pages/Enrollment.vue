@@ -166,7 +166,8 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-import { watch, computed } from 'vue'
+import { useConfirm } from "primevue/useconfirm"
+// import { watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import TopBar from '../components/TopBar'
@@ -207,6 +208,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const toast = useToast()
+        const confirm = useConfirm()
 
         console.log(`Status: ${store.state.students.student.student_status}, LRN: ${store.state.students.student.lrn}, STUDENT_ID: ${store.state.students.student.id}`)
         const studentStatus = store.state.students.student.student_status
@@ -291,8 +293,19 @@ export default {
         const submitForm = () => {
             if (!isValid.value) {
                 toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
+                return
             }
-            onSubmit()
+            confirm.require({
+                message: 'Are you sure you want to submit your enrollment?',
+                header: 'Confirmation',
+                icon: 'pi pi-exclamation-triangle',
+                accept: () => {
+                    onSubmit()
+                },
+                reject: () => {
+                    //callback to execute when user rejects the action
+                }
+            });
         }
 
         const getFees = () => {
