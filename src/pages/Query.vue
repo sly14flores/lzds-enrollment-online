@@ -6,19 +6,19 @@
                     <div class="p-grid">
                         <div class="p-col-6 p-offset-3">
                             <BlockUI :blocked="blocked">
-                                <Card>
+                                <Card class="card">
                                     <template #title>
                                         <p class="p-text-center">Retrieve your Student Information</p>
                                         <hr />                            
                                     </template>
                                     <template #content>
                                         <div class="p-fluid p-formgrid p-grid">
-                                            <div class="p-field p-md-12 p-lg-6">
+                                            <div class="p-field p-col-12 p-md-6">
                                                 <label class="p-text-uppercase">Learner Reference Number</label>
                                                 <InputText type="text" v-model="lrn" :class="{'p-invalid': lrnError}" />
                                                 <small class="p-error" v-if="lrnError">Please enter your Learner Reference Number</small>                                    
                                             </div>
-                                            <div class="p-field p-md-12 p-lg-6">
+                                            <div class="p-field p-col-12 p-md-6">
                                                 <label class="p-text-uppercase">Date of birth</label>
                                                 <InputText type="date" v-model="birthday" :class="{'p-invalid': birthdayError}" />
                                                 <small class="p-error" v-if="birthdayError">Please enter your date of birth</small>                                    
@@ -145,6 +145,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .card {
+        border-top: 4px solid #252a83;
+    }
 
     .lzds-width {
         width: 80%;

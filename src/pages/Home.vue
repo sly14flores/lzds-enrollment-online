@@ -1,36 +1,47 @@
 <template>
     <LayoutWrapper>
         <Header />
-        <div class="layout-main">
-            <div class="lzds-center">
-                <div class="p-mx-auto lzds-width">
-                    <Card class="card-mt">
-                        <template #title>
-                            Please select status
-                            <hr />
-                        </template>                
-                        <template #content>
-                            <div class="">
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="regular" name="regular" value="Regular" v-model="studentStatus" />
-                                    <label for="regular">Old or regular student</label>
+        <div>
+            <form @submit="onSubmit">
+                <div class="p-grid p-jc-center">
+                    <div class="p-lg-4 p-sm-12 p-xs-12">
+                        <Card class="card">
+                            <template #content>
+                                <div class="p-grid p-jc-center">
+                                    <h4 class="p-text-center p-text-bold">Please select status</h4>
                                 </div>
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="new" name="new" value="New" v-model="studentStatus" />
-                                    <label for="new">New student</label>
-                                </div>                        
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="transferee" name="transferee" value="Transferee" v-model="studentStatus" />
-                                    <label for="transferee">Transferee student</label>
+                                <hr />
+                                <div class="p-fluid">
+                                    <div class="p-grid p-mb-2">
+                                        <div class="p-field-radiobutton p-pl-6">
+                                            <RadioButton id="regular" name="regular" value="Regular" v-model="studentStatus" />
+                                            <label for="regular">Old or regular student</label>
+                                        </div>
+                                    </div>
+                                    <div class="p-grid p-mb-2">
+                                        <div class="p-field-radiobutton p-pl-6">
+                                            <RadioButton id="new" name="new" value="New" v-model="studentStatus" />
+                                            <label for="new">New student</label>
+                                        </div>
+                                    </div>
+                                    <div class="p-grid p-mb-2">                
+                                        <div class="p-field-radiobutton p-pl-6">
+                                            <RadioButton id="transferee" name="transferee" value="Transferee" v-model="studentStatus" />
+                                            <label for="transferee">Transferee student</label>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </template>
-                        <template #footer>
-                            <Button class="p-button-lg" label="Next" @click="next" />
-                        </template>
-                    </Card>         
+                                <hr />
+                                <div class="p-grid p-jc-center">
+                                    <div class="p-lg-3 p-sm-12 p-xs-12">
+                                        <Button class="p-button-lg" label="Next" @click="next" />
+                                    </div>
+                                </div>
+                            </template>
+                        </Card>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
         <Footer />
     </LayoutWrapper>        
@@ -120,9 +131,13 @@ export default {
     }
 
     .card-mt {
-        margin-top: -20%;
-    }    
+        margin-top: -35%;
+    }
 
+    .card {
+        border-top: 4px solid #252a83;
+    }
+    
     @media only screen and (max-width: 1200px) {
         .lzds-width {
             width: 35%
