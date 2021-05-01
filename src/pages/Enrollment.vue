@@ -13,6 +13,13 @@
                             <template #content>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-field p-col-4">
+                                        <label class="p-text-bold">Email Address</label>
+                                        <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
+                                        <small class="p-error">{{ email_addressError }}</small>
+                                    </div>                                    
+                                </div>
+                                <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                    <div class="p-field p-col-4">
                                         <label class="p-text-bold">Grade/Level</label>
                                         <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" :disabled="newStudent" @change="getFees" />
                                         <small class="p-error">{{ gradeError }}</small>
@@ -265,7 +272,7 @@ export default {
         const { value: lrn } = useField('enrollment.lrn',validField);
         const { value: student_id } = useField('enrollment.student_id',validField);
         const { value: student_status } = useField('enrollment.student_status',validField);
-        const { value: email_address } = useField('enrollment.email_address',validField);
+        const { value: email_address, errorMessage: email_addressError } = useField('enrollment.email_address',validateField);
         const { value: grade, errorMessage: gradeError } = useField('enrollment.grade',validateField);    
         const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
         const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
@@ -318,6 +325,7 @@ export default {
             discount_amount,
             discount_percentage,
             total_amount_to_pay,
+            email_addressError,
             gradeError,
             payment_modeError,
             payment_methodError,

@@ -20,14 +20,6 @@
                                     </div>                                                                                                      
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                   <div class="p-col-6">
-                                        Email:
-                                    </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
-                                        {{info.email_address}}
-                                    </div>                                                                       
-                                </div>
-                                <div class="p-grid p-mt-1 p-mr-2">
                                     <div class="p-col-6">
                                         Contact No:
                                     </div>
@@ -35,6 +27,14 @@
                                         {{info.contact_no}}
                                     </div>                                                                         
                                 </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                   <div class="p-col-6">
+                                        Email:*
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.email_address}}
+                                    </div>                                                                       
+                                </div>                                
                             </div> 
                             <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
                                 <div class="p-grid p-mr-2">
@@ -73,7 +73,10 @@
                         </div>
                         <div class="p-grid p-mt-3">
                             <div class="p-col">
-                                <p class="p-text-light p-text-italic">If your information is correct click Next to proceed to your enrollment</p>
+                                <p class="p-text-light">
+                                    If your information is correct click Next to proceed to your enrollment<br />
+                                    *If you want to update your email address you can do it in the next step                                    
+                                </p>
                             </div>
                         </div>           
                     </template>
