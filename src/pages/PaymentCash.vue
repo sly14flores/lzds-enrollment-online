@@ -26,7 +26,7 @@
                                                 <div class="p-text-normal p-name">Please visit Lord of Zion Divine School for your payment</div>
                                             </div>
                                         </div>
-                                        <div class="p-mt-6">
+                                        <div class="p-mt-5">
                                             <div class="p-d-flex p-jc-center">
                                                 <div class="p-text-normal p-name">Amount to pay</div>
                                             </div>

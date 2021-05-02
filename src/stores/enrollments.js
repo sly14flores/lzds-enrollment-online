@@ -180,7 +180,10 @@ const state = () => {
 const mutations = {
     INIT(state) {
         state.enrollment = enrollment
-    },    
+        state.payment = payment
+        state.loading = loading        
+        state.enrollment_uiid = enrollment_uiid
+    },
     ENROLL(state,payload) {
         state.enrollment = payload
     },
@@ -194,7 +197,7 @@ const mutations = {
         state.enrollment_uiid = null
     },
     PAYMENT_INFO(state,payload) {
-
+        state.payment = payload
     }
 }
 
