@@ -1,41 +1,41 @@
 <template>
     <LayoutWrapper>
         <TopBar />
-        <div class="layout-main">
-            <div class="lzds-width p-mx-auto">
-                <Card>
+        <div class="p-grid p-jc-center p-mt-6">
+            <div class="p-lg-6 p-sm-12">
+                <Card class="card">
                     <template #title>
                         <p class="p-text-center">Student Information</p>
                         <hr />                            
                     </template>
                     <template #content>
                         <div class="p-grid">
-                            <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
-                                <div class="p-grid p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-grid p-mr-2 p-mb-2">
+                                    <div class="p-col-6">
                                         Name:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
-                                        {{fullname}}
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{fullname}}    
                                     </div>                                                                                                      
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                   <div class="p-col-12 p-md-6">
+                                   <div class="p-col-6">
                                         Email:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         {{info.email_address}}
                                     </div>                                                                       
                                 </div>
-                                <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                                <div class="p-grid p-mt-1 p-mr-2 p-mb-2">
+                                    <div class="p-col-6">
                                         Contact No:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         {{info.contact_no}}
                                     </div>                                                                         
                                 </div>
-                                <div class="p-grid p-mt-1 p-mr-2">
+                                <div class="p-grid p-mt-1 p-mr-2 p-mb-2">
                                    <div class="p-col-6">
                                         Email:*
                                     </div>
@@ -45,35 +45,35 @@
                                 </div>                                
                             </div> 
                             <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
-                                <div class="p-grid p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                                <div class="p-grid p-mr-2 p-mb-2">
+                                    <div class="p-col-6">
                                         LRN:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         {{info.lrn}}
                                     </div>
                                 </div>
-                                <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                                <div class="p-grid p-mt-1 p-mr-2 p-mb-2">
+                                    <div class="p-col-6">
                                         Last SY Level/Grade:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         {{info.previous_level}}
                                     </div>                                    
                                 </div>
-                                <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                                <div class="p-grid p-mt-1 p-mr-2 p-mb-2">
+                                    <div class="p-col-6">
                                         Enrolling in Grade/Level:
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         {{info.next_level}}
                                     </div>                                    
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-12 p-md-6">
+                                    <div class="p-col-6">
                                         Tuition Fee Discount(s):
                                     </div>
-                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                    <div class="p-col-6 p-text-right p-text-bold">
                                         <span class="p-d-block" v-for="(d, i) in info.discounts" :key="i">{{d}}</span>
                                     </div>
                                 </div>                                                                                              
@@ -183,6 +183,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .card {
+        border-top: 4px solid #252a83;
+    }
 
     .lzds-width {
         width: 60%;

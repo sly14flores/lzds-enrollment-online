@@ -1,18 +1,18 @@
 <template>
     <LayoutWrapper>
         <TopBar />
-        <div class="layout-main">
-            <div class="lzds-width p-mx-auto">
+        <div class="p-grid p-jc-center p-mt-6">
+            <div class="p-lg-9 p-sm-12">
                 <form @submit.prevent="submitForm">
                     <BlockUI :blocked="loading">
-                        <Card>
+                        <Card class="card">
                             <template #title>
                                 Enrollment Form
                                 <hr />
                             </template>
                             <template #content>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" v-if="studentStatus=='Regular'">
-                                    <div class="p-field p-col-4">
+                                    <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Email Address</label>
                                         <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
                                         <small class="p-error">{{ email_addressError }}</small>
@@ -22,25 +22,25 @@
                                     </div>                               
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
-                                    <div class="p-field p-col-4">
+                                    <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Grade/Level</label>
                                         <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" :disabled="newStudent" @change="getFees" />
                                         <small class="p-error">{{ gradeError }}</small>
                                     </div>
-                                    <div class="p-field p-col-4">
+                                    <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Total fees</label>
                                         <InputText type="text" v-model="totalFees" :disabled="true" />                                           
                                     </div>
-                                    <div class="p-field p-col-4">
+                                    <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Down payment</label>
                                         <InputText type="text" v-model="downPayment" :disabled="payment_mode=='full'"/>                                           
                                     </div>                                                                                 
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
-                                    <div class="p-col-8">
+                                    <div class="p-col-12 p-md-8">
                                         <lable class="p-text-bold">Fees Details</lable>
                                         <div class="p-fluid p-formgrid p-grid">
-                                            <div class="p-sm-12 p-md-12 p-lg-6">
+                                            <div class="p-col-12 p-md-6">
                                                 <DataTable class="p-datatable-sm" :value="leftFees" showGridlines responsiveLayout="scroll">                                    
                                                     <Column field="no" header="#"></Column>
                                                     <!-- <Column field="category" header="Category"></Column> -->
@@ -48,7 +48,7 @@
                                                     <Column field="amount" header="Amount"></Column>
                                                 </DataTable>
                                             </div>
-                                            <div class="p-sm-12 p-md-12 p-lg-6">
+                                            <div class="p-col-12 p-md-6">
                                                 <DataTable class="p-datatable-sm" :value="rightFees" showGridlines responsiveLayout="scroll">                                    
                                                     <Column field="no" header="#"></Column>
                                                     <!-- <Column field="category" header="Category"></Column> -->
@@ -58,7 +58,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="p-field p-col-4">
+                                    <div class="p-field p-col-12 p-md-4">
                                         <div class="p-fluid p-formgrid p-grid">
                                             <div class="p-field p-col">
                                                 <label class="p-text-bold">Discount {{(discount_percentage>0)?`(${discount_percentage*100}%)`:''}}</label>
@@ -436,6 +436,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .card {
+        border-top: 4px solid #252a83;
+    }
 
     .lzds-width {
         width: 80%;
