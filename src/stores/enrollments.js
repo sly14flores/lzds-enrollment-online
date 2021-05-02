@@ -208,6 +208,11 @@ const actions = {
     ERROR({commit},payload) {
         const { status, data } = payload
         const { message } = data
+        if (status==406) {
+            const { data: { enrollment_uiid } } = data
+            commit('')
+            commit('UUID',enrollment_uiid)
+        }
         const icon = (status==406)?'info':'error'
         const html = (status==406)?
                     `<div style="padding-left: 35px; margin-top: -35px; color:#afdbbf">${message}</div>`:
