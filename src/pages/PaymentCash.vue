@@ -18,7 +18,7 @@
                                                 <div class="p-text-normal p-name">Enrollment Reference Number</div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                                <div class="p-text-bold p-total-number">{{payment.enrollee_rn}}</div>
                                             </div>                                            
                                         </div>
                                         <div class="p-mt-4">
@@ -26,7 +26,7 @@
                                                 <div class="p-text-normal p-name">Amount to pay</div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                                <div class="p-text-bold p-total-number">{{totalAmountToPay}}</div>
                                             </div>                                            
                                         </div>                                       
                                         <div class="p-mt-5">
@@ -60,7 +60,7 @@
 
 import { useStore } from 'vuex'
 // import { useRouter } from 'vue-router'
-// import { useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 // import { useToast } from "primevue/usetoast"
 import { computed } from 'vue'
 
@@ -90,13 +90,29 @@ export default {
     setup() {
 
         const store = useStore()
+        const route = useRoute()
+
+        const uiid = route.params.uiid
+        store.dispatch('enrollments/PAYMENT_INFO',{ uiid })
         
         const payment = computed(() => {
-            return {}
+            return {
+                ...store.state.enrollments.payment
+            }
+        })
+
+        function numberWithCommas(x) {
+            if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            else return 0
+        }
+
+        const totalAmountToPay = computed(() => {
+            return `Php ${numberWithCommas(store.state.enrollments.payment.total_amount_to_pay)}`
         })
 
         return {
-            payment
+            payment,
+            totalAmountToPay
         }
 
     },

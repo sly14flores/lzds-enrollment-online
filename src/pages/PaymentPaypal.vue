@@ -3,10 +3,10 @@
         <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
-                <form>
+                <form @submit="onSubmit">
                     <div class="p-grid">
                         <div class="p-col-8 p-offset-2">
-                            <BlockUI :blocked="false">
+                            <BlockUI :blocked="loading">
                                 <Card>
                                     <template #title>
                                         <p class="p-text-center">Pay using Paypal</p>
@@ -18,7 +18,7 @@
                                                 <div class="p-text-normal p-name">Enrollment Reference Number</div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                                <div class="p-text-bold p-total-number">{{payment.enrollee_rn}}</div>
                                             </div>                                            
                                         </div>
                                         <div class="p-mt-4">
@@ -26,7 +26,7 @@
                                                 <div class="p-text-normal p-name">Amount to pay</div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                                <div class="p-text-bold p-total-number">{{totalAmountToPay}}</div>
                                             </div>                                            
                                         </div>                                         
                                         <div class="p-mt-5">
@@ -52,7 +52,7 @@
                                                 </div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
-                                                <NextButton :loading="false" :label="'Submit'" />
+                                                <NextButton :loading="loading" :label="'Submit'" />
                                             </div>
                                         </div>
                                         <div class="p-mt-6">
@@ -80,10 +80,10 @@
 <script>
 
 import { useStore } from 'vuex'
-// import { useRouter } from 'vue-router'
-// import { useRoute } from 'vue-router'
-// import { useToast } from "primevue/usetoast"
-import { computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
+import { useToast } from "primevue/usetoast"
+import { computed, ref } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
@@ -98,6 +98,17 @@ import Dropdown from 'primevue/dropdown/sfc'
 import BlockUI from 'primevue/blockui/sfc'
 
 import { useForm, useIsFormValid, useField } from 'vee-validate'
+
+import { apiUrl } from '../url.js'
+import axios from 'axios'
+import route from '../library/route'
+
+const PAYPAL_REF_NO = `${apiUrl}/payment/paypal/:uiid`
+const submitRefno = (payload) => {
+    const { uiid, paypal_refno } = payload
+    const url =  route(PAYPAL_REF_NO, { uiid }) 
+    return axios.put(url, {paypal_refno})
+}
 
 export default {
     components: {
@@ -114,14 +125,28 @@ export default {
     },    
     setup() {
 
-
         const store = useStore()
+        const route = useRoute()
+        const router = useRouter()
+        const toast = useToast()
+
+        const uiid = route.params.uiid
+        store.dispatch('enrollments/PAYMENT_INFO',{ uiid })           
         
         const payment = computed(() => {
             return {
-
+                ...store.state.enrollments.payment
             }
         })
+
+        function numberWithCommas(x) {
+            if (x) return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            else return 0
+        }
+
+        const totalAmountToPay = computed(() => {
+            return `Php ${numberWithCommas(store.state.enrollments.payment.total_amount_to_pay)}`
+        })         
 
         const init = {
             initialValues: {
@@ -138,9 +163,21 @@ export default {
             return true;
         }        
         
+        const loading = ref(false)
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
             const { payment_reference_number } = values
+
+            loading.value = true
+            submitRefno({uiid: uiid, paypal_refno: payment_reference_number}).then(response => {
+                console.log(response)
+                loading.value = false
+                router.push('/refno/success')
+                // toast.add({severity:'success', summary: 'Notification', detail:'Your enrollment information has been updated. Thank you!', life: 3000});
+            }).catch(error => {
+                loading.value = false
+                toast.add({severity:'error', summary: 'Alert', detail:'Something went wrong. Please try again', life: 3000});                
+            })         
 
         })
         
@@ -151,7 +188,9 @@ export default {
         }
 
         return {
+            loading,
             payment,
+            totalAmountToPay,
             payment_reference_number,
             payment_reference_numberError,
             onSubmit,

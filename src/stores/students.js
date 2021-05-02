@@ -214,7 +214,7 @@ const actions = {
             const { message } = data || {}
             Swal.fire({
                 // text: 'No record found in our database',
-                html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">${message}</div>`,                    
+                html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">No record found in our database</div>`,                    
                 icon: 'error',
                 toast: 'true',
                 // position: 'top-right',

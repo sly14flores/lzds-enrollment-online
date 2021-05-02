@@ -12,10 +12,10 @@ const enrollStudent = (payload) => {
     return axios.post(ENROLL_STUDENT, payload)
 }
 
-const PAYMENT_INFO = `${apiUrl}/payment/info/:uuid`
+const PAYMENT_INFO = `${apiUrl}/payment/info/:uiid`
 const studentPayment = (payload) => {
-    const { uuid } = payload
-    const url =  route(PAYMENT_INFO, { uuid })
+    const { uiid } = payload
+    const url =  route(PAYMENT_INFO, { uiid })
     return axios.get(url)
 }
 
@@ -197,7 +197,7 @@ const mutations = {
         state.enrollment_uiid = null
     },
     PAYMENT_INFO(state,payload) {
-        state.payment = payload
+        state.payment = {...payload}
     }
 }
 
@@ -207,7 +207,7 @@ const actions = {
     },
     ERROR({commit},payload) {
         const { status, data } = payload
-        const { message } = data
+        let { message } = data
         if (status==406) {
             const { data: { enrollment_uiid } } = data
             commit('')
@@ -262,9 +262,9 @@ const actions = {
         }
     },
     async PAYMENT_INFO({commit},payload) {
-        const { uuid } = payload
+        const { uiid } = payload
         try {
-            const { data } = await studentPayment({ uuid })
+            const { data: { data } } = await studentPayment({ uiid })
             commit('PAYMENT_INFO',data)
         } catch(error) {
             const { response } = error || {}
