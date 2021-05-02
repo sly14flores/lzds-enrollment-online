@@ -254,8 +254,9 @@ export default {
         watch(
             () => store.state.enrollments.enrollment_uiid,
             (data, prevData) => {
-                console.log(data)
-                router.push('/payment/bank')
+                let page = payment_method.value
+                if (payment_method.value=='bank_deposit') page = 'bank'
+                router.push(`/payment/${page}/${data}`)
             }
         )        
 
