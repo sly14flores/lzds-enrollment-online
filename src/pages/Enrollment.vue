@@ -169,7 +169,7 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-// import { watch, computed } from 'vue'
+import { watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import TopBar from '../components/TopBar'
@@ -216,6 +216,8 @@ export default {
         const studentStatus = store.state.students.student.student_status
         const newStudent = studentStatus == 'New'
 
+        store.dispatch('enrollments/RESET_UUID')
+
         if (store.state.students.student.id===0) {
             router.push('/')
             toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current page to avoid losing of information while on session', life: 6000});
@@ -223,16 +225,14 @@ export default {
 
         store.dispatch('selections/LEVELS')
         store.dispatch('selections/QUESTIONNAIRES')
-        /**
-         * If new student get fees for Nursery already
-         */
-        let level = 1 
+
         /**
          * If regular student set grade to next_level_id
          * Set fees per next level
          */
-        if (studentStatus==null) level = store.state.students.student.next_level_id
+        let level = store.state.students.student.next_level_id
         if (studentStatus=='Transferee') level = null
+        if (studentStatus=='New') level = 1
 
         if (level!=null) store.dispatch('selections/FEES', {id: level})
 
@@ -250,6 +250,14 @@ export default {
                 }
             }
         }
+
+        watch(
+            () => store.state.enrollments.enrollment_uiid,
+            (data, prevData) => {
+                console.log(data)
+                router.push('/payment/bank')
+            }
+        )        
 
         const { handleSubmit } = useForm(init)
         const isValid = useIsFormValid()
@@ -299,12 +307,7 @@ export default {
             confirmButtonText: 'Ok'
             }).then((result) => {
                 if (result.isConfirmed) {
-                     store.dispatch('enrollments/ENROLL', enrollment)                    
-                    // Swal.fire(
-                    // 'Deleted!',
-                    // 'Your file has been deleted.',
-                    // 'success'
-                    // )
+                     store.dispatch('enrollments/ENROLL', enrollment)
                 }
             })
         })
