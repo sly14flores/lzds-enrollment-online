@@ -1,59 +1,42 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form>
                     <div class="p-grid">
                         <div class="p-col-8 p-offset-2">
                             <BlockUI :blocked="false">
-                                <Card>
+                                <Card class="p-text-center">
                                     <template #title>
-                                        <p class="p-text-center">Payment</p>
+                                        <p class="p-text-center">Cash Payment</p>
                                         <hr />                            
                                     </template>
                                     <template #content>
-                                        <div class="p-grid">
-                                            <div class="p-lg-12 p-sm-12">
-                                                <div class="p-grid">
-                                                    <div class="p-lg-12 p-mb-3">
-                                                        <div class="p-text-normal p-name">Reference Number</div>
-                                                        <div class="p-text-bold p-total-number">101070110017</div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-grid">
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Name of Student</div>
-                                                        <div class="p-text-bold p-total-number">Juan Dela Cruz</div>
-                                                    </div>
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Birthdate</div>
-                                                        <div class="p-text-bold p-total-number">June 10, 2006</div>
-                                                    </div>
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Gender</div>
-                                                        <div class="p-text-bold p-total-number">Male</div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-grid">
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Parent/Guardian</div>
-                                                        <div class="p-text-bold p-total-number">Two Dela Cruz</div>
-                                                    </div>
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Relationship</div>
-                                                        <div class="p-text-bold p-total-number">Father</div>
-                                                    </div>
-                                                    <div class="p-lg-4 p-mb-3">
-                                                        <div class="p-text-normal p-name">Contact Number</div>
-                                                        <div class="p-text-bold p-total-number">0925689854</div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-grid">
-                                                    <div class="p-lg-12">
-                                                        <div class="p-text-normal p-name">Total amount</div>
-                                                        <div class="p-text-bold p-total-number">9,209</div>
-                                                     </div>
-                                                </div>
+                                        <div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Enrollment Reference Number</div>
+                                            </div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="p-mt-4">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Please visit Lord of Zion Divine School for your payment</div>
+                                            </div>
+                                        </div>
+                                        <div class="p-mt-6">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Amount to pay</div>
+                                            </div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="p-mt-6">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">Thank You!</div>
                                             </div>
                                         </div>
                                     </template>
@@ -76,13 +59,14 @@
 <script>
 
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
-import { useToast } from "primevue/usetoast"
-import { ref, watch } from 'vue'
+// import { useRouter } from 'vue-router'
+// import { useRoute } from 'vue-router'
+// import { useToast } from "primevue/usetoast"
+import { computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
+import TopBar from '../components/TopBar'
 
 import Card from 'primevue/card/sfc'
 import Button from 'primevue/button/sfc'
@@ -95,6 +79,7 @@ export default {
     components: {
         LayoutWrapper,
         Footer,
+        TopBar,
         Card,
         Button,
         RadioButton,
@@ -104,19 +89,33 @@ export default {
     },    
     setup() {
 
+        const store = useStore()
+        
+        const payment = computed(() => {
+            return {}
+        })
+
+        return {
+            payment
+        }
+
     },
 }
 </script>
 
 <style scoped>
 
+    .f-width {
+        width: 100%important;
+    }
+
     .lzds-width {
-        width: 80%;
+        width: 70%;
     }
 
     @media only screen and (max-width: 1200px) {
         .lzds-width {
-            width: 80%
+            width: 70%
         }
     }
 
@@ -154,6 +153,9 @@ export default {
     }
     .p-total-number{
         font-size: 20px;
+    }
+    .hl {
+        border: 1px solid red;
     }
 
 </style>

@@ -1,5 +1,5 @@
 import { apiUrl } from '../url.js'
-// import route from '../library/route'
+import route from '../library/route'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
@@ -10,6 +10,13 @@ import Swal from 'sweetalert2'
 const ENROLL_STUDENT = `${apiUrl}/enroll/student/online`
 const enrollStudent = (payload) => {
     return axios.post(ENROLL_STUDENT, payload)
+}
+
+const PAYMENT_INFO = `${apiUrl}/payment/info/:uuid`
+const studentPayment = (payload) => {
+    const { uuid } = payload
+    const url =  route(PAYMENT_INFO, { uuid })
+    return axios.get(url)
 }
 
 const enrollment = {
@@ -156,6 +163,8 @@ const testEnrollment = {
     // enrollment_uiid: null,
 }
 
+const payment = {}
+
 const loading = false
 const enrollment_uiid = null
 
@@ -163,6 +172,7 @@ const state = () => {
     return {
         enrollment,
         loading,
+        payment,
         enrollment_uiid,
     }
 }
@@ -182,6 +192,9 @@ const mutations = {
     },
     RESET_UUID(state) {
         state.enrollment_uiid = null
+    },
+    PAYMENT_INFO(state,payload) {
+
     }
 }
 
@@ -240,6 +253,16 @@ const actions = {
             dispatch('ERROR',{status, data})
         }
     },
+    async PAYMENT_INFO({commit},payload) {
+        const { uuid } = payload
+        try {
+            const { data } = await studentPayment({ uuid })
+            commit('PAYMENT_INFO',data)
+        } catch(error) {
+            const { response } = error || {}
+            const { status, data } = response || null
+        }
+    },    
     RESET_UUID({commit}) {
         commit('RESET_UUID')
     }
