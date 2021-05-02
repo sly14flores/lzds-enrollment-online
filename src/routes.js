@@ -39,23 +39,23 @@ export default [
         component: StudentInfo,
     },
     {
-        path: "/payment/cash",
+        path: "/payment/cash/:uiid",
         name: "PaymentCash",
         component: PaymentCash,        
     },
     {
-        path: "/payment/bank",
+        path: "/payment/bank/:uiid",
         name: "PaymentBank",
         component: PaymentBank,        
     },
     {
-        path: "/payment/gcash",
+        path: "/payment/gcash/:uuid",
         name: "PaymentGcash",
         component: PaymentGcash,        
     },
     {
-        path: "/payment/paypal",
+        path: "/payment/paypal/:uiid",
         name: "PaymentPaypal",
-        component: PaymentPaypal,        
+        component: PaymentPaypal,   
     }         
 ]

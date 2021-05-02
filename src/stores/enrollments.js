@@ -216,7 +216,8 @@ const actions = {
     async ENROLL({commit, dispatch}, payload) {
         commit('LOADING',true)
         try {
-            const { data: { enrollment_uiid } } = await enrollStudent(payload)
+            const { data } = await enrollStudent(payload)
+            const { data: { enrollment_uiid } } = data
             commit('UUID',enrollment_uiid)
             commit('LOADING',false)
             Swal.fire({
