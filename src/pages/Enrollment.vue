@@ -287,25 +287,14 @@ export default {
         const onSubmit = handleSubmit((values, actions) => {
             const { enrollment } = values
             console.log(enrollment)
-            store.dispatch('enrollments/ENROLL', enrollment)
+            // store.dispatch('enrollments/ENROLL', enrollment)
         })
 
         const submitForm = () => {
             if (!isValid.value) {
                 toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
-                return
             }
-            confirm.require({
-                message: 'Are you sure you want to submit your enrollment?',
-                header: 'Confirmation',
-                icon: 'pi pi-exclamation-triangle',
-                accept: () => {
-                    onSubmit()
-                },
-                reject: () => {
-                    //callback to execute when user rejects the action
-                }
-            });
+            onSubmit()
         }
 
         const getFees = () => {
