@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <Card>
@@ -11,69 +12,85 @@
                         <div class="p-grid">
                             <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
                                 <div class="p-grid p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         Name:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{fullname}}
                                     </div>                                                                                                      
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                   <div class="p-col-6">
+                                   <div class="p-col-12 p-md-6">
                                         Email:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{info.email_address}}
                                     </div>                                                                       
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         Contact No:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{info.contact_no}}
                                     </div>                                                                         
                                 </div>
+                                <div class="p-grid p-mt-1 p-mr-2">
+                                   <div class="p-col-6">
+                                        Email:*
+                                    </div>
+                                    <div class="p-col-6 p-text-right p-text-bold">
+                                        {{info.email_address}}
+                                    </div>                                                                       
+                                </div>                                
                             </div> 
                             <div class="p-xs-12 p-sm-12 p-md-12 p-lg-6">
                                 <div class="p-grid p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         LRN:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{info.lrn}}
                                     </div>
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         Last SY Level/Grade:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{info.previous_level}}
                                     </div>                                    
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         Enrolling in Grade/Level:
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
                                         {{info.next_level}}
                                     </div>                                    
                                 </div>
                                 <div class="p-grid p-mt-1 p-mr-2">
-                                    <div class="p-col-6">
+                                    <div class="p-col-12 p-md-6">
                                         Tuition Fee Discount(s):
                                     </div>
-                                    <div class="p-col-6 p-text-right p-text-bold">
-                                        <span class="p-d-inline-block">123412341234</span>
-                                        <span class="p-d-inline-block">123412341234</span>
+                                    <div class="p-col-12 p-md-6 p-text-right p-text-bold">
+                                        <span class="p-d-block" v-for="(d, i) in info.discounts" :key="i">{{d}}</span>
                                     </div>
                                 </div>                                                                                              
                             </div>                                                      
-                        </div>             
+                        </div>
+                        <div class="p-grid p-mt-3">
+                            <div class="p-col">
+                                <p class="p-text-light">
+                                    If your information is correct click Next to proceed to your enrollment<br />
+                                    *If you want to update your email address you can do it in the next step                                    
+                                </p>
+                            </div>
+                        </div>           
                     </template>
                     <template #footer>
-                        <div class="lzds-center p-mt-6 p-mb-4">
+                        <hr />
+                        <div class="lzds-center p-mb-4">
                             <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                             <NextButton :loading="loading" style="margin-left: .5em" @click="next" />
                         </div>
@@ -94,6 +111,7 @@ import { useToast } from "primevue/usetoast"
 import { ref, watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 import NextButton from '../components/NextButton'
 
@@ -107,6 +125,7 @@ import Dropdown from 'primevue/dropdown/sfc'
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
@@ -121,13 +140,22 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const toast = useToast()
+
+        if (store.state.students.student.id==0) {
+            router.push('/')
+            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current to avoid losing of information while on session', life: 6000});            
+        }        
+
+        store.dispatch('selections/INIT')
+        store.dispatch('enrollments/INIT')         
         
+        console.log(store.state.students.student)
         const info = computed(() => {
-            return {...store.state.students.studentInfo}
+            return {...store.state.students.student}
         })
 
         const fullname = computed(() => {
-            return `${store.state.students.studentInfo.firstname} ${store.state.students.studentInfo.lastname}`
+            return `${store.state.students.student.firstname} ${store.state.students.student.lastname}`
         })
 
         const back = () => {

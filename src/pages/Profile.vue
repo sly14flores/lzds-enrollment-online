@@ -66,6 +66,16 @@
                                             <RadioButton id="Female" name="gender" value="Female" v-model="gender" :class="{'p-invalid': genderError}" />
                                             <label for="Female">Female</label>
                                         </div>
+                                        <small class="p-error">{{ escError }}</small>
+                                    </div> -->
+                                </div>
+                                <h5><i class="pi pi-user"></i> Basic Info</h5>
+                                <hr />
+                                <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label class="p-text-bold">Last name</label>
+                                        <InputText type="text" v-model="lastname" :class="{'p-invalid': lastnameError}" />
+                                        <small class="p-error">{{ lastnameError }}</small>
                                     </div>
                                     <small class="p-error">{{ genderError }}</small>
                                 </div>                                 
@@ -87,7 +97,13 @@
                                             <RadioButton id="indigent_yes" name="indigent" :value="true" v-model="indigent" />
                                             <label for="indigent_yes">Yes</label>
                                         </div>
+                                        <small class="p-error">{{ genderError }}</small>
                                     </div>                                 
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label class="p-text-bold">Birthdate</label>
+                                        <InputText type="date" v-model="date_of_birth" :class="{'p-invalid': date_of_birthError}" />
+                                        <small class="p-error">{{ date_of_birthError }}</small>
+                                    </div>                              
                                 </div>
                                 <div class="p-field p-col-12 p-md-4">
                                     <label class="p-text-bold">Indigenous Group</label>
@@ -191,6 +207,7 @@ import { useToast } from "primevue/usetoast"
 import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
+import TopBar from '../components/TopBar'
 import Footer from '../components/Footer'
 
 import Card from 'primevue/card/sfc'
@@ -198,18 +215,25 @@ import Button from 'primevue/button/sfc'
 import RadioButton from 'primevue/radiobutton/sfc'
 import InputText from 'primevue/inputtext/sfc'
 import Dropdown from 'primevue/dropdown/sfc'
+import BlockUI from 'primevue/blockui/sfc'
+import NextButton from '../components/NextButton'
 
-import { useForm, useField } from 'vee-validate'
+import { useForm, useIsFormValid, useField } from 'vee-validate'
+
+import Swal from 'sweetalert2'
 
 export default {
     components: {
         LayoutWrapper,
+        TopBar,
         Footer,
         Card,
         Button,
         RadioButton,
         InputText,
         Dropdown,
+        BlockUI,
+        NextButton
     },    
     setup() {
 
@@ -228,6 +252,9 @@ export default {
         store.dispatch('selections/PROVINCES',{code: '01'})
         store.dispatch('selections/INDIGENOUS_GROUPS')
         store.dispatch('selections/DIALECTS')
+
+        store.dispatch('selections/INIT')        
+        store.dispatch('enrollments/INIT') 
 
         watch(
             () => store.state.students.student.updated_dt,
@@ -250,12 +277,13 @@ export default {
                 student: {
                     // ...store.state.students.student,                  
                     ...store.state.students.testStudent,
-                    student_status: studentStatus,               
+                    student_status: studentStatus,            
                 }
             }
         }
 
-        const { setValues, handleSubmit, resetForm } = useForm(init);
+        const {  handleSubmit } = useForm(init);
+        const isValid = useIsFormValid()
         
         function validateField(value) {
             if (!value) {
@@ -277,7 +305,7 @@ export default {
 
         const { value: id } = useField('student.id',validField);
         const { value: lrn, errorMessage: lrnError } = useField('student.lrn',(transfereeStudent)?validateField:validField);
-        const { value: esc_voucher_grantee, errorMessage: escError } = useField('student.esc_voucher_grantee',validateBool);
+        // const { value: esc_voucher_grantee, errorMessage: escError } = useField('student.esc_voucher_grantee',validateBool);
         const { value: lastname, errorMessage: lastnameError }  = useField('student.lastname',validateField);
         const { value: firstname, errorMessage: firstnameError }  = useField('student.firstname',validateField);
         const { value: middlename } = useField('student.middlename',validField);
@@ -303,6 +331,7 @@ export default {
 
         const { value: region } = useField('student.region',validField);
         const { value: student_status } = useField('student.student_status',validField);
+        const { value: total_discounts_percentage } = useField('student.total_discounts_percentage',validField);
 
         // const region = "01"
         // const student_status = store.state.studentStatus
@@ -320,8 +349,34 @@ export default {
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
             const { student } = values
-            store.dispatch('students/STUDENT', student)
+
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Are you sure all the information are correct? Please confirm before proceesing",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    store.dispatch('students/STUDENT', student)
+                    // Swal.fire(
+                    // 'Deleted!',
+                    // 'Your file has been deleted.',
+                    // 'success'
+                    // )
+                }
+            })
+            
         })
+
+        const submitForm = () => {
+            if (!isValid.value) {
+                toast.add({severity:'error', summary: 'Required fields', detail:'Please fill up all required fields', life: 3000});
+            }
+            onSubmit()
+        }        
 
         const back = () => {
             router.push('/')
@@ -330,7 +385,7 @@ export default {
         return {
             id,
             lrn,
-            esc_voucher_grantee,
+            // esc_voucher_grantee,
             lastname,
             firstname,
             middlename,
@@ -352,10 +407,11 @@ export default {
             gp_firstname,
             gp_middlename,
             gp_lastname,
-            gp_contact_no, 
+            gp_contact_no,
+            total_discounts_percentage,
             indigent,
             lrnError,
-            escError,
+            // escError,
             lastnameError,
             firstnameError,
             date_of_birthError,
@@ -373,7 +429,7 @@ export default {
             gp_contact_noError,
             fetchCities,
             fetchBarangays,
-            onSubmit,
+            submitForm,
             back,
         }
 
@@ -409,6 +465,9 @@ export default {
         },
         dialects() {
             return this.$store.state.selections.dialects
+        },
+        loading() {
+            return this.$store.state.selections.loading || this.$store.state.students.loading
         }
     }
 }

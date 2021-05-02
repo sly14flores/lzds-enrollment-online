@@ -2,7 +2,7 @@
     <LayoutWrapper>
         <Header />
         <div>
-            <form @submit="onSubmit">
+            <form>
                 <div class="p-grid p-jc-center">
                     <div class="p-lg-4 p-sm-12 p-xs-12">
                         <Card class="card">
@@ -71,6 +71,7 @@ export default {
 
         const studentStatus = ref(null)
 
+        store.dispatch('selections/INIT')
         store.dispatch('students/INIT')
 
         const next = () => {
@@ -86,10 +87,12 @@ export default {
 
                 case 'New':
                     router.push('/profile/new')
+                    store.dispatch('students/PRIVACY')
                 break;
 
                 case 'Transferee':
                     router.push('/profile/transferee')
+                    store.dispatch('students/PRIVACY')
                 break;
             }
         }
@@ -117,6 +120,10 @@ export default {
 </script>
 
 <style scoped>
+
+    .card {
+        border-top: 4px solid #252a83;
+    }
 
     .hl {
         border: 1px solid red;
@@ -190,6 +197,6 @@ export default {
         .card-mt {
             margin-top: 0;
         }     
-    }   
+    }
 
 </style>

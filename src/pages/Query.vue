@@ -1,10 +1,11 @@
 <template>
     <LayoutWrapper>
-        <div class="layout-main">
-            <div class="lzds-width p-mx-auto">
+        <TopBar /> 
+        <div class="p-grid p-jc-center p-mt-6">
+            <div class="p-lg-6 p-sm-12">
                 <form @submit="onSubmit">
                     <div class="p-grid">
-                        <div class="p-col-6 p-offset-3">
+                        <div class="p-col-12 p-md-12">
                             <BlockUI :blocked="blocked">
                                 <Card class="card">
                                     <template #title>
@@ -26,6 +27,7 @@
                                         </div>
                                     </template>
                                     <template #footer>
+                                        <hr />
                                         <div class="lzds-center p-mt-1 p-mb-4">
                                             <Button icon="pi pi-times" label="Back" class="p-button-secondary" @click="back"/>
                                             <NextButton :loading="loading" style="margin-left: .5em" />
@@ -52,6 +54,7 @@ import { ref, watch } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
+import TopBar from '../components/TopBar'
 import NextButton from '../components/NextButton'
 
 import Card from 'primevue/card/sfc'
@@ -67,6 +70,7 @@ export default {
     components: {
         LayoutWrapper,
         Footer,
+        TopBar,
         Card,
         Button,
         RadioButton,
@@ -83,10 +87,12 @@ export default {
         const toast = useToast()
 
         const studentStatus = 'Regular'
-        store.dispatch('students/STUDENT_INFO',{ id: 0 })
+
+        store.dispatch('selections/INIT')
+        store.dispatch('students/INIT')    
 
         watch(
-            () => store.state.students.studentInfo.id,
+            () => store.state.students.student.id,
             (data, prevData) => {
                 router.push('/student/info')
             }
