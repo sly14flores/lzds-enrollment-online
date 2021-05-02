@@ -11,7 +11,7 @@
                                 <hr />
                             </template>
                             <template #content>
-                                <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                <div class="p-fluid p-formgrid p-grid p-mb-2" v-if="studentStatus=='Regular'">
                                     <div class="p-field p-col-4">
                                         <label class="p-text-bold">Email Address</label>
                                         <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
@@ -218,7 +218,7 @@ export default {
 
         if (store.state.students.student.id===0) {
             router.push('/')
-            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current page to avoid losing of information while on session', life: 10000});
+            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current page to avoid losing of information while on session', life: 6000});
         }
 
         store.dispatch('selections/LEVELS')
@@ -355,7 +355,8 @@ export default {
             getFees,
             back,
             newStudent,
-            isValid
+            isValid,
+            studentStatus
         }
     },
     computed: {

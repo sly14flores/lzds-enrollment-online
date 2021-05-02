@@ -143,7 +143,7 @@ export default {
 
         if (store.state.students.student.id==0) {
             router.push('/')
-            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current to avoid losing of information while on session', life: 10000});            
+            toast.add({severity:'warn', summary: 'Warning!', detail:'You have been redirected to the first page because you have refreshed the current page. Please do not refresh the current to avoid losing of information while on session', life: 6000});            
         }        
 
         store.dispatch('selections/INIT')

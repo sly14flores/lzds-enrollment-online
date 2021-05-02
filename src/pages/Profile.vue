@@ -3,7 +3,7 @@
         <TopBar />
         <div class="p-grid p-jc-center p-mt-6">
             <div class="p-lg-9 p-sm-12">
-                <form @submit="onSubmit">
+                <form @submit.prevent="submitForm">
                     <BlockUI :blocked="loading">
                         <Card class="card">
                             <template #title>
@@ -207,6 +207,8 @@ import NextButton from '../components/NextButton'
 
 import { useForm, useIsFormValid, useField } from 'vee-validate'
 
+import Swal from 'sweetalert2'
+
 export default {
     components: {
         LayoutWrapper,
@@ -334,7 +336,26 @@ export default {
         const onSubmit = handleSubmit((values, actions) => {
             console.log(values)
             const { student } = values
-            store.dispatch('students/STUDENT', student)
+
+            Swal.fire({
+                title: 'Confirmation',
+                text: "Are you sure all the information are correct? Please confirm before proceesing",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    store.dispatch('students/STUDENT', student)
+                    // Swal.fire(
+                    // 'Deleted!',
+                    // 'Your file has been deleted.',
+                    // 'success'
+                    // )
+                }
+            })
+            
         })
 
         const submitForm = () => {
