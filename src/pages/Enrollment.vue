@@ -16,7 +16,10 @@
                                         <label class="p-text-bold">Email Address</label>
                                         <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
                                         <small class="p-error">{{ email_addressError }}</small>
-                                    </div>                                    
+                                    </div>
+                                    <div class="p-col-8 p-mt-5">
+                                        <p class="p-text-light p-mt-2">We will use your email to send you notifications</p>
+                                    </div>                               
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-field p-col-4">
@@ -166,7 +169,6 @@
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
-import { useConfirm } from "primevue/useconfirm"
 // import { watch, computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
@@ -186,6 +188,7 @@ import Column from 'primevue/column/sfc';
 import ColumnGroup from 'primevue/columngroup/sfc';
 
 import { useForm, useIsFormValid, useField } from 'vee-validate'
+import Swal from 'sweetalert2'
 
 export default {
     components: {
@@ -208,7 +211,6 @@ export default {
         const store = useStore()
         const router = useRouter()
         const toast = useToast()
-        const confirm = useConfirm()
 
         console.log(`Status: ${store.state.students.student.student_status}, LRN: ${store.state.students.student.lrn}, STUDENT_ID: ${store.state.students.student.id}`)
         const studentStatus = store.state.students.student.student_status
@@ -287,7 +289,24 @@ export default {
         const onSubmit = handleSubmit((values, actions) => {
             const { enrollment } = values
             console.log(enrollment)
-            // store.dispatch('enrollments/ENROLL', enrollment)
+            Swal.fire({
+            title: 'Confirmation',
+            text: "We will now process your enrollment, please confirm",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ok'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                     store.dispatch('enrollments/ENROLL', enrollment)                    
+                    // Swal.fire(
+                    // 'Deleted!',
+                    // 'Your file has been deleted.',
+                    // 'success'
+                    // )
+                }
+            })
         })
 
         const submitForm = () => {
