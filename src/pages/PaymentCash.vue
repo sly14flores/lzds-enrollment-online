@@ -23,16 +23,16 @@
                                         </div>
                                         <div class="p-mt-4">
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-normal p-name">Please visit Lord of Zion Divine School for your payment</div>
-                                            </div>
-                                        </div>
-                                        <div class="p-mt-5">
-                                            <div class="p-d-flex p-jc-center">
                                                 <div class="p-text-normal p-name">Amount to pay</div>
                                             </div>
                                             <div class="p-d-flex p-jc-center">
                                                 <div class="p-text-bold p-total-number">LZDS20210002</div>
                                             </div>                                            
+                                        </div>                                       
+                                        <div class="p-mt-5">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Please visit Lord of Zion Divine School for your payment</div>
+                                            </div>
                                         </div>
                                         <div class="p-mt-6">
                                             <div class="p-d-flex p-jc-center">
@@ -42,7 +42,7 @@
                                     </template>
                                     <template #footer>
                                         <div class="lzds-center p-mt-1 p-mb-4">
-
+                                            <p class="p-text-italic">We have also sent you a link of this instructions in you email for future reference</p>
                                         </div>
                                     </template>                                     
                                 </Card>
@@ -104,10 +104,6 @@ export default {
 </script>
 
 <style scoped>
-
-    .f-width {
-        width: 100%important;
-    }
 
     .lzds-width {
         width: 70%;

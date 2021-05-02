@@ -1,5 +1,6 @@
 <template>
     <LayoutWrapper>
+        <TopBar />
         <div class="layout-main">
             <div class="lzds-width p-mx-auto">
                 <form>
@@ -12,35 +13,57 @@
                                         <hr />                            
                                     </template>
                                     <template #content>
-                                        <div class="p-grid">
-                                            <div class="p-lg-5 p-sm-12">
-                                                <img src="../assets/payment/paypal.png" class="paypal" />
+                                        <div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Enrollment Reference Number</div>
                                             </div>
-                                            <div class="p-lg-7 p-sm-12">
-                                                <div class="p-grid">
-                                                    <div class="p-lg-12 p-mb-3">
-                                                        <div class="p-text-normal p-name">Reference Number</div>
-                                                        <div class="p-text-bold p-total-number">101070110017</div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-grid">
-                                                    <div class="p-lg-12 p-mb-3">
-                                                        <div class="p-text-normal p-name">Name of Student</div>
-                                                        <div class="p-text-bold p-total-number">Juan Dela Cruz</div>
-                                                    </div>
-                                                </div>
-                                                <div class="p-grid">
-                                                    <div class="p-lg-12">
-                                                        <div class="p-text-normal p-name">Total amount</div>
-                                                        <div class="p-text-bold p-total-number">9,209</div>
-                                                     </div>
-                                                </div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                            </div>                                            
+                                        </div>
+                                        <div class="p-mt-4">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name">Amount to pay</div>
+                                            </div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">LZDS20210002</div>
+                                            </div>                                            
+                                        </div>                                         
+                                        <div class="p-mt-5">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name p-mr-4 p-ml-4">Click on Paypal.Me below to pay</div>
                                             </div>
                                         </div>
+                                        <div class="p-mt-5">
+                                            <div class="p-text-center">
+                                                <Button label="Paypal.Me" class="p-button-warning" @click="paypal"/>
+                                            </div>
+                                        </div>                                        
+                                        <div class="p-mt-4">
+                                            <hr />
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-normal p-name p-mr-4 p-ml-4">If you have already paid submit your paypal payment reference number now</div>
+                                            </div>
+                                            <div class="p-fluid p-formgrid p-grid">
+                                                <div class="p-field p-col p-mt-3">
+                                                    <label class="p-text-center p-text-bold p-d-block">Paypal Reference Number</label>
+                                                    <InputText type="text" v-model="payment_reference_number" :class="{'p-invalid': payment_reference_numberError}" />
+                                                    <small class="p-error" v-if="payment_reference_numberError">Paypal reference number is required</small>                                                
+                                                </div>
+                                            </div>
+                                            <div class="p-d-flex p-jc-center">
+                                                <NextButton :loading="false" :label="'Submit'" />
+                                            </div>
+                                        </div>
+                                        <div class="p-mt-6">
+                                            <div class="p-d-flex p-jc-center">
+                                                <div class="p-text-bold p-total-number">Thank You!</div>
+                                            </div>
+                                        </div>                                        
                                     </template>
                                     <template #footer>
                                         <div class="lzds-center p-mt-1 p-mb-4">
-                                            <a href=""><button class="button p-ml-2" style="vertical-align:middle"><span>Pay</span></button></a>
+                                            <p class="p-text-italic">We have also sent you a link of this instructions in you email for future reference</p>
                                         </div>
                                     </template>                                     
                                 </Card>
@@ -57,13 +80,15 @@
 <script>
 
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { useRoute } from 'vue-router'
-import { useToast } from "primevue/usetoast"
-import { ref, watch } from 'vue'
+// import { useRouter } from 'vue-router'
+// import { useRoute } from 'vue-router'
+// import { useToast } from "primevue/usetoast"
+import { computed } from 'vue'
 
 import LayoutWrapper from '../components/LayoutWrapper'
 import Footer from '../components/Footer'
+import TopBar from '../components/TopBar'
+import NextButton from '../components/NextButton'
 
 import Card from 'primevue/card/sfc'
 import Button from 'primevue/button/sfc'
@@ -71,6 +96,8 @@ import RadioButton from 'primevue/radiobutton/sfc'
 import InputText from 'primevue/inputtext/sfc'
 import Dropdown from 'primevue/dropdown/sfc'
 import BlockUI from 'primevue/blockui/sfc'
+
+import { useForm, useIsFormValid, useField } from 'vee-validate'
 
 export default {
     components: {
@@ -81,9 +108,55 @@ export default {
         RadioButton,
         InputText,
         Dropdown,
-        BlockUI  
+        BlockUI,
+        TopBar,
+        NextButton,
     },    
     setup() {
+
+
+        const store = useStore()
+        
+        const payment = computed(() => {
+            return {
+
+            }
+        })
+
+        const init = {
+            initialValues: {
+                payment_reference_number: null
+            }
+        }
+
+        const {  handleSubmit } = useForm(init);
+
+        function validateField(value) {
+            if (!value) {
+                return "This field is required";
+            }
+            return true;
+        }        
+        
+        const onSubmit = handleSubmit((values, actions) => {
+            console.log(values)
+            const { payment_reference_number } = values
+
+        })
+        
+        const { value: payment_reference_number, errorMessage: payment_reference_numberError } = useField('payment_reference_number',validateField);
+
+        const paypal = () => {
+            window.open('https://www.paypal.com/paypalme/lzds','_blank')
+        }
+
+        return {
+            payment,
+            payment_reference_number,
+            payment_reference_numberError,
+            onSubmit,
+            paypal
+        }
 
     },
 }
