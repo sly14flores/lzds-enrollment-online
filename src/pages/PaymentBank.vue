@@ -124,7 +124,7 @@
                                         <div class="p-mt-4">
                                             <hr />
                                             <div class="p-d-flex p-jc-center">
-                                                <div class="p-text-normal p-name">We will be posting payments and release official shot of your proof of payment</div>
+                                                <div class="p-text-normal p-name">We will be posting payments and release the official receipt after verification and from the time it is acknowledge</div>
                                             </div>
                                         </div>
                                         <div class="p-mt-6">
