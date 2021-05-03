@@ -13,6 +13,8 @@ export default {
 <style scoped>
   .layout-footer {
     text-align: center;
+    background-color: #00123a;
+    color: white;
   }
 </style>
 
