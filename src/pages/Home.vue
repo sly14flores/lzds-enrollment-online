@@ -2,8 +2,8 @@
     <LayoutWrapper>
         <Header />
         <div class="p-grid p-jc-center">
-            <div class="p-lg-4 p-sm-12">
-                <Card class="card p-mt-1">
+            <div class="p-lg-4 p-sm-12 p-mt-6">
+                <Card class="card">
                     <template #content>
                         <div class="p-d-flex p-jc-center">
                             <h4 class="p-text-center p-text-bold">Please select status</h4>
@@ -122,6 +122,7 @@ export default {
 
     .card {
         border-top: 4px solid #252a83;
+        margin-top: 27%;
     }
 
     .hl {
