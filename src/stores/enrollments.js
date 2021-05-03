@@ -33,6 +33,7 @@ const enrollment = {
     discount_amount: 0,
     discount_percentage: 0,
     total_amount_to_pay: 0,
+    student_fees: [],
     // questionnaires: [],
     // enrollment_uiid: null,
 }
@@ -50,6 +51,7 @@ const testEnrollment = {
     discount_amount: 0,
     discount_percentage: 0,    
     total_amount_to_pay: 0,
+    student_fees: [],    
     // questionnaires: [
     //     {
     //         id: 1,
