@@ -24,7 +24,7 @@
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Grade/Level</label>
-                                        <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" :disabled="newStudent" @change="getFees" />
+                                        <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" @change="getFees" />
                                         <small class="p-error">{{ gradeError }}</small>
                                     </div>
                                     <div class="p-field p-col-12 p-md-4">
@@ -297,6 +297,9 @@ export default {
 
         const onSubmit = handleSubmit((values, actions) => {
             const { enrollment } = values
+
+            enrollment.student_fees = store.state.selections.fees.fees
+
             console.log(enrollment)
             Swal.fire({
             title: 'Confirmation',
