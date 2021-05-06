@@ -1,5 +1,5 @@
 import { apiUrl } from '../url.js'
-// import route from '../library/route'
+import route from '../library/route'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
@@ -10,6 +10,13 @@ import Swal from 'sweetalert2'
 const ENROLL_STUDENT = `${apiUrl}/enroll/student/online`
 const enrollStudent = (payload) => {
     return axios.post(ENROLL_STUDENT, payload)
+}
+
+const PAYMENT_INFO = `${apiUrl}/payment/info/:uiid`
+const studentPayment = (payload) => {
+    const { uiid } = payload
+    const url =  route(PAYMENT_INFO, { uiid })
+    return axios.get(url)
 }
 
 const enrollment = {
@@ -26,6 +33,7 @@ const enrollment = {
     discount_amount: 0,
     discount_percentage: 0,
     total_amount_to_pay: 0,
+    student_fees: [],
     // questionnaires: [],
     // enrollment_uiid: null,
 }
@@ -43,6 +51,7 @@ const testEnrollment = {
     discount_amount: 0,
     discount_percentage: 0,    
     total_amount_to_pay: 0,
+    student_fees: [],    
     // questionnaires: [
     //     {
     //         id: 1,
@@ -156,6 +165,8 @@ const testEnrollment = {
     // enrollment_uiid: null,
 }
 
+const payment = {}
+
 const loading = false
 const enrollment_uiid = null
 
@@ -163,6 +174,7 @@ const state = () => {
     return {
         enrollment,
         loading,
+        payment,
         enrollment_uiid,
     }
 }
@@ -170,7 +182,10 @@ const state = () => {
 const mutations = {
     INIT(state) {
         state.enrollment = enrollment
-    },    
+        state.payment = payment
+        state.loading = loading        
+        state.enrollment_uiid = enrollment_uiid
+    },
     ENROLL(state,payload) {
         state.enrollment = payload
     },
@@ -182,6 +197,9 @@ const mutations = {
     },
     RESET_UUID(state) {
         state.enrollment_uiid = null
+    },
+    PAYMENT_INFO(state,payload) {
+        state.payment = {...payload}
     }
 }
 
@@ -191,7 +209,12 @@ const actions = {
     },
     ERROR({commit},payload) {
         const { status, data } = payload
-        const { message } = data
+        let { message } = data
+        if (status==406) {
+            const { data: { enrollment_uiid } } = data
+            commit('')
+            commit('UUID',enrollment_uiid)
+        }
         const icon = (status==406)?'info':'error'
         const html = (status==406)?
                     `<div style="padding-left: 35px; margin-top: -35px; color:#afdbbf">${message}</div>`:
@@ -240,6 +263,16 @@ const actions = {
             dispatch('ERROR',{status, data})
         }
     },
+    async PAYMENT_INFO({commit},payload) {
+        const { uiid } = payload
+        try {
+            const { data: { data } } = await studentPayment({ uiid })
+            commit('PAYMENT_INFO',data)
+        } catch(error) {
+            const { response } = error || {}
+            const { status, data } = response || null
+        }
+    },    
     RESET_UUID({commit}) {
         commit('RESET_UUID')
     }

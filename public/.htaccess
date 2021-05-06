@@ -7,7 +7,7 @@
 </ifModule>
 
 #Protect Directory
-AuthName "Authentication"
-AuthType Basic
-AuthUserFile /home/lzds/.htpasswd
-Require valid-user
+#AuthName "Authentication"
+#AuthType Basic
+#AuthUserFile /home/lzds/.htpasswd
+#Require valid-user

@@ -142,7 +142,7 @@ const mutations = {
             title: 'DATA PRIVACY CONSENT',
             html:   '<p class="p-text-left">By proceeding to filling up the succeeding forms, you agree and consent as follows:</p>' +
                     '<p class="p-text-left">1. That you are fully aware that Lord of Zion Divine School (herein referred to as the “School”) or its designated representative is duty bound and obligated under the Data Privacy Act of 2012 to protect all of your personal and sensitive information that it collects, processes, and retains upon your enrollment and during your stay in the School.</p>' +
-                    '<p class="p-text-left">2. That the School has utilized VSmart Enroll (herein referred to as the “Website”), which is owned, managed, and operated by Vibal Group, Inc. (herein referred to as “VGI”) as its enrollment management system. Both the Website and VGI are also duty bound and obligated under the Data Privacy Act of 2012 to protect all of your personal and sensitive information that it connects, processes, and retains upon your enrollment and during your stay in the School.</p>' +
+                    '<p class="p-text-left">2. That the School has utilized LZDS Online Enrollment System (herein referred to as the “Website”), which is owned, managed, and operated by Lord of Zion Divine School Inc. as its enrollment management system. Both the Website and Enrollment system are also duty bound and obligated under the Data Privacy Act of 2012 to protect all of your personal and sensitive information that it connects, processes, and retains upon your enrollment and during your stay in the School.</p>' +
                     '<p class="p-text-left">3. That Student personal information includes any information about your identity, academics, medical conditions, or any documents containing your identity. This includes but is not limited to your name, address, names of your parents or guardians, date of birth, grades, attendance, disciplinary records, and other information necessary for basic administration and instruction.</p>' +
                     '<p class="p-text-left">4. That you understand that your personal information cannot be disclosed without your consent. You understand that the information that was collected and processed relates to your enrollment and may be used by the School or VGI to pursue their individual legitimate business interests. Likewise, you are fully aware that the School or VGI may share such information to its officers, or affiliated or partner organizations as part of its contractual obligations, or with government agencies pursuant to law or legal process. In this regard, you allow both the School and VGI to collect, process, use, and share your personal data in the pursuit of their individual interests as educational institutions.</p>',
             width: 1300,
@@ -214,7 +214,7 @@ const actions = {
             const { message } = data || {}
             Swal.fire({
                 // text: 'No record found in our database',
-                html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">${message}</div>`,                    
+                html: `<div style="padding-left: 35px; margin-top: -35px; color:#d10926">No record found in our database</div>`,                    
                 icon: 'error',
                 toast: 'true',
                 // position: 'top-right',

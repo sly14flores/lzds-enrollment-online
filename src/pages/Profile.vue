@@ -93,28 +93,28 @@
                                     </div>
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Indigenous Group</label>
-                                        <Dropdown v-model="indigenous" :options="indigenousGroups" optionLabel="name" optionValue="name" placeholder="Select indigenous group" :filter="true" :disabled="!indigent" />
+                                        <Dropdown v-model="indigenous" :options="indigenousGroups" optionLabel="name" optionValue="name" placeholder="Select indigenous group" :filter="false" :disabled="!indigent" />
                                     </div>
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Mother Tonque</label>
-                                        <Dropdown v-model="mother_tongue" :class="{'p-invalid': mother_tongueError}" :options="dialects" optionLabel="name" optionValue="name" placeholder="Select dialect" :filter="true" />
+                                        <Dropdown v-model="mother_tongue" :class="{'p-invalid': mother_tongueError}" :options="dialects" optionLabel="name" optionValue="name" placeholder="Select dialect" :filter="false" />
                                         <small class="p-error">{{ mother_tongueError }}</small>
                                     </div>                                                                                                                          
                                 </div>                            
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Province</label>
-                                        <Dropdown v-model="province" :class="{'p-invalid': provinceError}" :options="provinces" optionLabel="name" optionValue="code" placeholder="Select province" :filter="true" @change="fetchCities" />
+                                        <Dropdown v-model="province" :class="{'p-invalid': provinceError}" :options="provinces" optionLabel="name" optionValue="code" placeholder="Select province" :filter="false" @change="fetchCities" />
                                         <small class="p-error">{{ provinceError }}</small>
                                     </div>
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Municipality/City</label>
-                                        <Dropdown v-model="city" :class="{'p-invalid': cityError}" :options="cities" optionLabel="name" optionValue="code" placeholder="Select municipality/city" :filter="true" @change="fetchBarangays" />
+                                        <Dropdown v-model="city" :class="{'p-invalid': cityError}" :options="cities" optionLabel="name" optionValue="code" placeholder="Select municipality/city" :filter="false" @change="fetchBarangays" />
                                         <small class="p-error">{{ cityError }}</small>
                                     </div>
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Barangay</label>
-                                        <Dropdown v-model="barangay" :class="{'p-invalid': barangayError}" :options="barangays" optionLabel="name" optionValue="code" placeholder="Select barangay" :filter="true" />
+                                        <Dropdown v-model="barangay" :class="{'p-invalid': barangayError}" :options="barangays" optionLabel="name" optionValue="code" placeholder="Select barangay" :filter="false" />
                                         <small class="p-error">{{ barangayError }}</small>
                                     </div>
                                 </div>
@@ -262,8 +262,8 @@ export default {
         const init = {
             initialValues: {
                 student: {
-                    // ...store.state.students.student,                  
-                    ...store.state.students.testStudent,
+                    ...store.state.students.student,              
+                    // ...store.state.students.testStudent,
                     student_status: studentStatus,            
                 }
             }

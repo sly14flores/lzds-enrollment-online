@@ -100,10 +100,10 @@ export default {
 
         const init = {
             initialValues: {
-                // lrn: null,
-                // birthday: null,
-                lrn: '101070110017',
-                birthday: '2006-10-19',                
+                lrn: null,
+                birthday: null,
+                // lrn: '101070110017',
+                // birthday: '2006-10-19',                
             }
         }        
 

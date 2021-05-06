@@ -2,33 +2,36 @@
     <LayoutWrapper>
         <Header />
         <div class="p-grid p-jc-center">
-            <div class="p-lg-4 p-sm-12">
+            <div class="p-lg-4 p-sm-12 p-mt-6">
                 <Card class="card">
                     <template #content>
-                        <div class="p-grid p-jc-center">
+                        <div class="p-d-flex p-jc-center">
                             <h4 class="p-text-center p-text-bold">Please select status</h4>
                         </div>
                         <hr />
-                        <div class="p-fluid">
-                            <div class="p-grid p-mb-2">
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="regular" name="regular" value="Regular" v-model="studentStatus" />
-                                    <label for="regular">Old or regular student</label>
+                        <div class="p-d-flex p-jc-center">
+                            <div class="p-fluid p-mx-auto" style="width: 80%;">
+                                <div class="p-grid p-mb-2">
+                                    <div class="p-field-radiobutton p-pl-2">
+                                        <RadioButton id="regular" name="regular" value="Regular" v-model="studentStatus" />
+                                        <label for="regular">Old or regular student</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-grid p-mb-2">
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="new" name="new" value="New" v-model="studentStatus" />
-                                    <label for="new">New student</label>
+                                <div class="p-grid p-mb-2">
+                                    <div class="p-field-radiobutton p-pl-2">
+                                        <RadioButton id="new" name="new" value="New" v-model="studentStatus" />
+                                        <label for="new">New student</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="p-grid p-mb-2">                
-                                <div class="p-field-radiobutton p-pl-6">
-                                    <RadioButton id="transferee" name="transferee" value="Transferee" v-model="studentStatus" />
-                                    <label for="transferee">Transferee student</label>
+                                <div class="p-grid p-mb-2">                
+                                    <div class="p-field-radiobutton p-pl-2">
+                                        <RadioButton id="transferee" name="transferee" value="Transferee" v-model="studentStatus" />
+                                        <label for="transferee">Transferee student</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+
                         <hr />
                         <div class="p-grid p-jc-center">
                             <div class="p-lg-3 p-sm-12 p-xs-12">
@@ -119,6 +122,7 @@ export default {
 
     .card {
         border-top: 4px solid #252a83;
+        margin-top: 27%;
     }
 
     .hl {
@@ -189,6 +193,10 @@ export default {
         .card-mt {
             margin-top: 0;
         }     
+    }
+
+    .hl {
+        border: 1px solid red
     }
 
 </style>

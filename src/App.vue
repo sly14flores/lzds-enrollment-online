@@ -14,7 +14,7 @@ import Toast from 'primevue/toast';
 export default {
   name: 'App',
   components: {
-    Toast
+    Toast,
   }
 }
 </script>
@@ -28,7 +28,11 @@ export default {
         text-align: center;
     }
     .page-bg {
-        background-image: url('/images/sergey-zolkin-unsplash.png');
-        background-repeat: no-repeat;
+      background-image: url('/images/lzds-bg.png');
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: cover;
+      background-color:#464646;
     }
 </style>

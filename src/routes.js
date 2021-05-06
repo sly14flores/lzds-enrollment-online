@@ -11,6 +11,7 @@ import PaymentCash from './pages/PaymentCash'
 import PaymentBank from './pages/PaymentBank'
 import PaymentGcash from './pages/PaymentGcash'
 import PaymentPaypal from './pages/PaymentPaypal'
+import ThankYou from './pages/ThankYou'
 
 export default [
     {
@@ -49,7 +50,7 @@ export default [
         component: PaymentBank,        
     },
     {
-        path: "/payment/gcash/:uuid",
+        path: "/payment/gcash/:uiid",
         name: "PaymentGcash",
         component: PaymentGcash,        
     },
@@ -57,5 +58,10 @@ export default [
         path: "/payment/paypal/:uiid",
         name: "PaymentPaypal",
         component: PaymentPaypal,   
-    }         
+    },
+    {
+        path: "/refno/success",
+        name: "ThankYou",
+        component: ThankYou,   
+    }            
 ]
