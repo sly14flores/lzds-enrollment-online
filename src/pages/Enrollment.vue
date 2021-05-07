@@ -11,6 +11,19 @@
                                 <hr />
                             </template>
                             <template #content>
+                                <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                    <div class="p-field p-col-12 p-md-12">
+                                        <Message>
+                                            <p class="p-ml-4">Note: </p>
+                                            <div class="p-field p-col-12 p-md-12 p-ml-4">
+                                                <p>• Filipino citizen students enrolled in Grade 7-10 will apply for ESC grant to receive Php 9,000 and be deducted upon enrolment from their school fees.</p>
+                                                <p>• Grade 10 completers from Public Schools will be automatically be qualified in the Voucher Program (VP) subsidy of the government with the amount grant of Php 17,500 and additional Php 1,000 scholarship grant from LZDS to be deducted upon enrolment from their school fees.</p>
+                                                <p>• Grade 10 completers and ESC grantees from Private Schools will automatically be qualified in the Voucher Program (VP) subsidy of the government with the amount of Php 14,000 to be deducted upon enrolment from their school fees.</p>
+                                            </div>
+                                        </Message>
+                                    </div>              
+                                </div>
+
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" v-if="studentStatus=='Regular'">
                                     <div class="p-field p-col-12 p-md-4">
                                         <label class="p-text-bold">Email Address</label>
@@ -182,10 +195,12 @@ import InputText from 'primevue/inputtext/sfc'
 import Dropdown from 'primevue/dropdown/sfc'
 import BlockUI from 'primevue/blockui/sfc'
 import NextButton from '../components/NextButton'
+import Message from 'primevue/message/sfc';
 
 import DataTable from 'primevue/datatable/sfc';
 import Column from 'primevue/column/sfc';
 import ColumnGroup from 'primevue/columngroup/sfc';
+import Fieldset from 'primevue/fieldset/sfc';
 
 import { useForm, useIsFormValid, useField } from 'vee-validate'
 import Swal from 'sweetalert2'
@@ -204,7 +219,9 @@ export default {
         Column,
         ColumnGroup,
         BlockUI,
-        NextButton
+        NextButton,
+        Fieldset,
+        Message
     },
     setup() {
 
