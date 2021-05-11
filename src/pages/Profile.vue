@@ -339,7 +339,7 @@ export default {
 
             Swal.fire({
                 title: 'Confirmation',
-                text: "Are you sure all the information are correct? Please confirm before proceesing",
+                text: "Are you sure all the information are correct? Please confirm before proceeding",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
