@@ -13,6 +13,8 @@ import PaymentGcash from './pages/PaymentGcash'
 import PaymentPaypal from './pages/PaymentPaypal'
 import ThankYou from './pages/ThankYou'
 
+import Notice from './pages/Notice'
+
 export default [
     {
         path: "/",
@@ -63,5 +65,10 @@ export default [
         path: "/refno/success",
         name: "ThankYou",
         component: ThankYou,   
-    }            
+    },
+    {
+        path: "/notice",
+        name: "Notice",
+        component: Notice,   
+    },            
 ]

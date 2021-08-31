@@ -250,7 +250,8 @@ export default {
                 store.dispatch('LRN',store.state.students.student.lrn)
                 store.dispatch('STUDENT_ID',store.state.students.student.id)
                 toast.add({severity:'success', summary: 'Student Profile', detail:'Your information were save successfully', life: 3000});
-                router.push('/enrollment')
+                // router.push('/enrollment')
+                router.push('/notice')
             }
         )
 

@@ -163,7 +163,8 @@ export default {
         }
 
         const next = () => {
-            router.push('/enrollment')
+            // router.push('/enrollment')
+            router.push('/notice')
         }
 
         return {
