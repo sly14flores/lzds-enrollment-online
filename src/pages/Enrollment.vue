@@ -11,7 +11,7 @@
                                 <hr />
                             </template>
                             <template #content>
-                                <div class="p-fluid p-formgrid p-grid p-mb-2">
+                                <!-- <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-field p-col-12 p-md-12">
                                         <Message>
                                             <p class="p-ml-4">Note: </p>
@@ -22,7 +22,7 @@
                                             </div>
                                         </Message>
                                     </div>              
-                                </div>
+                                </div> -->
 
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" v-if="studentStatus=='Regular'">
                                     <div class="p-field p-col-12 p-md-4">
