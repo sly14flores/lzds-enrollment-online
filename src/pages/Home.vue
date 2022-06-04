@@ -14,13 +14,13 @@
                                 <div class="p-grid p-mb-2">
                                     <div class="p-field-radiobutton p-pl-2">
                                         <RadioButton id="regular" name="regular" value="Regular" v-model="studentStatus" />
-                                        <label for="regular">Old or regular student</label>
+                                        <label for="regular" style="line-height: normal;">Old or regular student<br />(LZDS Student)</label>
                                     </div>
                                 </div>
                                 <div class="p-grid p-mb-2">
                                     <div class="p-field-radiobutton p-pl-2">
                                         <RadioButton id="new" name="new" value="New" v-model="studentStatus" />
-                                        <label for="new">New student</label>
+                                        <label for="new" style="line-height: normal;">New student<br />(New Nursery / Kindergarten Student)</label>
                                     </div>
                                 </div>
                                 <div class="p-grid p-mb-2">                

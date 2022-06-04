@@ -298,12 +298,20 @@ export default {
             return true;
         }
 
+        function validateStrand(grade) {
+            if ((grade==13) || (grade==14)) {
+                return true
+            }
+            return false
+        }
+
         const { value: id } = useField('enrollment.id',validField);
         const { value: lrn } = useField('enrollment.lrn',validField);
         const { value: student_id } = useField('enrollment.student_id',validField);
         const { value: student_status } = useField('enrollment.student_status',validField);
         const { value: email_address, errorMessage: email_addressError } = useField('enrollment.email_address',validateField);
         const { value: grade, errorMessage: gradeError } = useField('enrollment.grade',validateField);    
+        const { value: strand, errorMessage: strandError } = useField('enrollment.strand',validateStrand(grade));
         const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
         const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
         const { value: esc_voucher_grantee, errorMessage: escError } = useField('enrollment.esc_voucher_grantee',validateBool);        
@@ -363,6 +371,7 @@ export default {
             student_status,
             email_address,         
             grade,
+            strand,
             payment_mode,
             payment_method,
             esc_voucher_grantee,
@@ -372,6 +381,7 @@ export default {
             total_amount_to_pay,
             email_addressError,
             gradeError,
+            strandError,
             payment_modeError,
             payment_methodError,
             escError,
