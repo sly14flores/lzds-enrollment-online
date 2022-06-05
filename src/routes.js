@@ -14,6 +14,7 @@ import PaymentPaypal from './pages/PaymentPaypal'
 import ThankYou from './pages/ThankYou'
 
 import Notice from './pages/Notice'
+import ParentalConsent from './pages/ParentalConsent'
 
 export default [
     {
@@ -70,5 +71,10 @@ export default [
         path: "/notice",
         name: "Notice",
         component: Notice,   
-    },            
+    },
+    {
+        path: "/consent",
+        name: "Consent",
+        component: ParentalConsent,
+    },
 ]

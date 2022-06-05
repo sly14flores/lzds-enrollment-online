@@ -29,7 +29,7 @@ export default {
     }
     .page-bg {
       background-image: url('/images/lzds-bg.png');
-      background-position: center center;
+      /* background-position: center center; */
       background-repeat: no-repeat;
       background-attachment: fixed;
       background-size: cover;
