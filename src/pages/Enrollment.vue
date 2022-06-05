@@ -25,34 +25,39 @@
                                 </div> -->
 
                                 <div class="p-fluid p-formgrid p-grid p-mb-2" v-if="studentStatus=='Regular'">
-                                    <div class="p-field p-col-12 p-md-4">
+                                    <div class="p-field p-col-12 p-md-3">
                                         <label class="p-text-bold">Email Address</label>
                                         <InputText type="text" v-model="email_address" :class="{'p-invalid': email_addressError}" />
                                         <small class="p-error">{{ email_addressError }}</small>
                                     </div>
-                                    <div class="p-col-8 p-mt-5">
+                                    <div class="p-col-8 p-mt-9">
                                         <p class="p-text-light p-mt-2">We will use your email to send you notifications</p>
                                     </div>                               
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
-                                    <div class="p-field p-col-12 p-md-4">
+                                    <div class="p-field p-col-12 p-md-3">
                                         <label class="p-text-bold">Grade/Level</label>
                                         <Dropdown v-model="grade" :class="{'p-invalid': gradeError}" :options="levels" optionLabel="description" optionValue="id" placeholder="Select grade/level" @change="getFees" />
                                         <small class="p-error">{{ gradeError }}</small>
                                     </div>
-                                    <div class="p-field p-col-12 p-md-4">
+                                    <div v-if="grade == 13 || grade == 14" class="p-field p-col-12 p-md-3">
+                                        <label class="p-text-bold">Strand</label>
+                                        <Dropdown v-model="strand" :class="{'p-invalid': strandError}" :options="strands" optionLabel="name" optionValue="name" placeholder="Select strand" />
+                                        <small class="p-error">{{ strandError }}</small>
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-3">
                                         <label class="p-text-bold">Total fees</label>
                                         <InputText type="text" v-model="totalFees" :disabled="true" />                                           
                                     </div>
-                                    <div class="p-field p-col-12 p-md-4">
+                                    <div class="p-field p-col-12 p-md-3">
                                         <label class="p-text-bold">Down payment</label>
                                         <InputText type="text" v-model="downPayment" :disabled="payment_mode=='full'"/>                                           
                                     </div>                                                                                 
                                 </div>
                                 <div class="p-fluid p-formgrid p-grid p-mb-2">
                                     <div class="p-col-12 p-md-8">
-                                        <lable class="p-text-bold">Fees Details</lable>
-                                        <div class="p-fluid p-formgrid p-grid">
+                                        <label class="p-text-bold">Fees Details</label>
+                                        <div class="p-fluid p-formgrid p-grid p-mt-2">
                                             <div class="p-col-12 p-md-6">
                                                 <DataTable class="p-datatable-sm" :value="leftFees" showGridlines responsiveLayout="scroll">                                    
                                                     <Column field="no" header="#"></Column>
@@ -71,7 +76,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="p-field p-col-12 p-md-4">
+                                    <div class="p-field p-col-12 p-md-3">
                                         <div class="p-fluid p-formgrid p-grid">
                                             <div class="p-field p-col">
                                                 <label class="p-text-bold">Discount {{(discount_percentage>0)?`(${discount_percentage*100}%)`:''}}</label>
@@ -277,7 +282,7 @@ export default {
             }
         )        
 
-        const { handleSubmit } = useForm(init)
+        const { handleSubmit, values } = useForm(init)
         const isValid = useIsFormValid()
 
         function validateField(value) {
@@ -298,11 +303,13 @@ export default {
             return true;
         }
 
-        function validateStrand(grade) {
-            if ((grade==13) || (grade==14)) {
-                return true
+        function validateStrand(value) {
+            if ((values.enrollment?.grade===13) || (values.enrollment?.grade===14)) {
+                if (value==null) {
+                    return "Please select strand";
+                }
             }
-            return false
+            return true;
         }
 
         const { value: id } = useField('enrollment.id',validField);
@@ -311,7 +318,7 @@ export default {
         const { value: student_status } = useField('enrollment.student_status',validField);
         const { value: email_address, errorMessage: email_addressError } = useField('enrollment.email_address',validateField);
         const { value: grade, errorMessage: gradeError } = useField('enrollment.grade',validateField);    
-        const { value: strand, errorMessage: strandError } = useField('enrollment.strand',validateStrand(grade));
+        const { value: strand, errorMessage: strandError } = useField('enrollment.strand',validateStrand);
         const { value: payment_mode, errorMessage: payment_modeError } = useField('enrollment.payment_mode',validateField);    
         const { value: payment_method, errorMessage: payment_methodError } = useField('enrollment.payment_method',validateField);    
         const { value: esc_voucher_grantee, errorMessage: escError } = useField('enrollment.esc_voucher_grantee',validateBool);        
@@ -363,6 +370,13 @@ export default {
                 router.push('/student/info')
             }
         }
+
+        const strands = [
+            {id: 1, name: "STEM"},
+            {id: 2, name: "GAS"},
+            {id: 3, name: "ABM"},
+            {id: 4, name: "HUMSS"}
+        ]
         
         return {
             id,
@@ -390,7 +404,8 @@ export default {
             back,
             newStudent,
             isValid,
-            studentStatus
+            studentStatus,
+            strands,
         }
     },
     computed: {
