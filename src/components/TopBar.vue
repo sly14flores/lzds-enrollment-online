@@ -7,7 +7,7 @@
                 <p class="p-text-size">Online Enrollment System</p>
             </div>
             <div class="p-col-3 p-md-3">
-                <p class="sy">SY: 2021-22</p>
+                <p class="sy">SY: 2022-23</p>
             </div>
         </div>
         
