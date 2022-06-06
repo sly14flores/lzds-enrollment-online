@@ -107,9 +107,9 @@ export default {
 
     const checkAgree = () => {
 
-      if (agreed.value) {
-        document.getElementById('download').click();
-      }
+      // if (agreed.value) {
+      //   document.getElementById('download').click();
+      // }
 
     }
 
