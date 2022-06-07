@@ -16,7 +16,7 @@
                       <h5 class="p-mb-4" style="text-align: center; line-height: 1.5em;">
                         Please read the Parental Consent and check <strong>"I have read and agree to this Parental Consent"</strong> below
                         <br />
-                        After you have agreed, a copy of a Parental Consent will be downloaded to your device.
+                        After you have agreed, a copy of a Parental Consent will be emailed to you.
                         <br />
                         Fill up the consent and email it to <strong>lordofziondivineschool@gmail.com</strong>
                       </h5>
@@ -58,6 +58,8 @@ import { ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useToast } from "primevue/usetoast"
+import axios from 'axios'
+import { apiUrl } from '../url'
 
 // import VuePdfEmbed from 'vue-pdf-embed'
 
@@ -106,10 +108,15 @@ export default {
     const agreed = ref(false)
 
     const checkAgree = () => {
-
-      // if (agreed.value) {
+      // console.log(store.state.students.student.email_address)
+      if (agreed.value) {
       //   document.getElementById('download').click();
-      // }
+        axios.post(`${apiUrl}/send/parental-consent`, {email: store.state.students.student.email_address}).then(res => {
+
+        }).catch(err => {
+
+        })
+      }
 
     }
 
