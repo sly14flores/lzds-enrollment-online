@@ -7,12 +7,37 @@
                 <p class="p-text-size">Online Enrollment System</p>
             </div>
             <div class="p-col-3 p-md-3">
-                <p class="sy">SY: 2022-23</p>
+                <p class="sy">SY: {{current_sy}}</p>
             </div>
         </div>
         
     </div>
 </template>
+
+<script>
+
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+
+export default {
+    setup() {
+
+        const store = useStore()
+
+        store.dispatch('CURRENT_SY')
+
+        const current_sy = computed(() => {
+            return store.state.current_sy
+        })
+
+        return {
+            current_sy
+        }
+
+    }
+}
+
+</script>
 
 <style scoped>
     .logo {
