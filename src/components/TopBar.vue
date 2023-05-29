@@ -30,6 +30,8 @@ export default {
             return {...store.state.current_sy}
         })
 
+        const _sy = '2023'
+
         return {
             current_sy
         }
