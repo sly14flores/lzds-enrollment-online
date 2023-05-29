@@ -27,10 +27,8 @@ export default {
         store.dispatch('CURRENT_SY')
 
         const current_sy = computed(() => {
-            return {...store.state.current_sy}
+            return store.state.current_sy
         })
-
-        const _sy = '2023'
 
         return {
             current_sy
