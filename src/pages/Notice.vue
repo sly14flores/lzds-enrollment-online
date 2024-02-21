@@ -86,7 +86,7 @@ export default {
     }
 
     const next = () => {
-        router.push('/consent')
+        router.push('/enrollment')
     }    
 
     return {
