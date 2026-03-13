@@ -371,13 +371,18 @@ export default {
             }
         }
 
+        // const strands = [
+        //    {id: 1, name: "STEM"},
+        //    {id: 2, name: "GAS"},
+        //    {id: 3, name: "ABM"},
+        //    {id: 4, name: "HUMSS"}
+        // ]
+
         const strands = [
-            {id: 1, name: "STEM"},
-            {id: 2, name: "GAS"},
-            {id: 3, name: "ABM"},
-            {id: 4, name: "HUMSS"}
-        ]
-        
+            {id: 1, name: "Academic Track"},
+            {id: 2, name: "Technical-Professional Track"},
+        ]     
+
         return {
             id,
             lrn,
