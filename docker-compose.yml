@@ -1,0 +1,7 @@
+services:
+  online-enrollment:
+    build: .
+    ports:
+      - "${PUBLIC_PORT}:${PRIVATE_PORT}"
+    # volumes:
+    #   - ./dist:/usr/share/nginx/html # Optional: For hot-reloading (not for prod)
