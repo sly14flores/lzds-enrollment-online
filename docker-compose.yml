@@ -3,5 +3,6 @@ services:
     build: .
     ports:
       - "${PUBLIC_PORT}:${PRIVATE_PORT}"
+    restart: always
     # volumes:
     #   - ./dist:/usr/share/nginx/html # Optional: For hot-reloading (not for prod)
