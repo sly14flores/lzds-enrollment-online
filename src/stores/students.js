@@ -91,12 +91,14 @@ const testStudent = {
 }
 
 const loading = false
+const notFound = null
 
 const state = () => {
     return {
         student,
         testStudent,
         loading,
+        notFound,
     }
 }
 
@@ -104,10 +106,14 @@ const mutations = {
     INIT(state) {
         state.student = {...student}
         state.loading = false
+        state.notFound = false
     },
     LOADING(state,payload) {
         state.loading = payload
     },
+    NOT_FOUND(state,payload) {
+        state.notFound = payload
+    },    
     STUDENT(state,payload) {
         state.student = {...payload}
         // state.student.id = payload.id
@@ -175,6 +181,9 @@ const actions = {
         }
         commit('LOADING',false)
     },
+    NOT_FOUND({commit}, payload) {
+        commit('NOT_FOUND', payload)
+    },
     async PRIVACY({commit}) {
         commit('PRIVACY')
     },
@@ -194,6 +203,7 @@ const actions = {
         try {
             const { data: { data } } = await queryStudent(payload)
             commit('QUERY_STUDENT',data)
+            commit('NOT_FOUND',false)
             // commit('LOADING',false)
             Swal.fire({
                 // text: 'Record found',
@@ -226,6 +236,7 @@ const actions = {
                 timer: 3000,
             })            
             dispatch('ERROR',response)
+            commit('NOT_FOUND',true)
         }
     },
 }

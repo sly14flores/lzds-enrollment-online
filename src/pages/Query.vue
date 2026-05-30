@@ -25,6 +25,13 @@
                                                 <small class="p-error" v-if="birthdayError">Please enter your date of birth</small>                                    
                                             </div>                                
                                         </div>
+                                        <div v-if="notFound" class="alert">
+                                            <div style="font-weight: 500;">Note:</div>
+                                            <div>The system is currently undergoing maintenance and upgrades in preparation for the incoming academic year. If you have entered the required information and receive a 'No Record Found' message, please proceed clicking the button below.</div>
+                                            <div style="text-align: center; padding-top: 15px;">
+                                                <Button label="Proceed as New Student" class="p-button-danger" @click="newStudent"/>
+                                            </div>
+                                        </div>
                                     </template>
                                     <template #footer>
                                         <hr />
@@ -98,6 +105,13 @@ export default {
             }
         )
 
+        watch(
+            () => store.state.students.notFound,
+            (data, prevData) => {
+                console.log(data)
+            }
+        )
+
         const init = {
             initialValues: {
                 lrn: null,
@@ -120,13 +134,17 @@ export default {
         const { value: birthday, errorMessage: birthdayError } = useField('birthday',validateField);    
         
         const onSubmit = handleSubmit((values, actions) => {
-            console.log(values)
             const { lrn, birthday } = values
             store.dispatch('students/QUERY_STUDENT', { lrn, birthday })
-        })        
+        })
 
         const back = () => {
             router.push('/')
+        }
+
+        const newStudent = () => {
+            router.push('/profile/new')
+            store.dispatch('students/PRIVACY')
         }
 
         return {
@@ -135,7 +153,8 @@ export default {
             birthday,
             birthdayError,
             back,
-            onSubmit
+            newStudent,
+            onSubmit,
         }
 
     },
@@ -145,6 +164,9 @@ export default {
         },
         blocked() {
             return this.$store.state.students.loading
+        },
+        notFound() {
+            return this.$store.state.students.notFound===true
         }
     }
 }
@@ -194,6 +216,17 @@ export default {
         .lzds-width {
             width: 100%
         }    
+    }
+
+    /* The alert message box */
+    .alert {
+        padding: 20px;
+        border: 1px solid;
+        border-radius: 3px;
+        border-color: #ff625a;
+        background-color: #f4d0ce; /* Red */
+        color: rgb(221, 11, 11);
+        margin-bottom: 15px;
     }
 
 </style>
